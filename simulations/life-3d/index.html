@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#143b36">
+  <meta name="description" content="동물세포, 근육 조직, 심장을 돌려 보고 부위를 눌러 배우는 중학교 과학 3D 탐구실">
+  <title>생명 구조 탐구실 · 3D 과학</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/controls/OrbitControls.js":"./vendor/OrbitControls.js"}}</script>
+</head>
+<body>
+  <header class="header"><a class="brand" href="./"><span class="brand-icon">◈</span><span>생명 구조 탐구실<small>SCIENCE IN THREE DIMENSIONS</small></span></a><div class="header-right"><a class="portal-link" href="../../index.html">← 전체 시뮬레이션</a><span class="unit">중학교 과학 <span>동물과 에너지</span></span></div></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">작은 세포에서, 하나의 기관까지</p><h1>돌려 보고, 눌러 보고, 이해하기.</h1><p class="sub">눈에 보이지 않던 생명 구조를 입체로 탐구해 보세요.</p></div><div class="hierarchy"><span>세포</span><i>→</i><span>조직</span><i>→</i><span>기관</span></div></section>
+    <nav class="models" aria-label="모형 선택">
+      <button data-model="cell" class="model active" aria-pressed="true"><span class="model-no">01</span><span><b>동물세포</b><small>생명 활동의 기본 단위</small></span><span class="model-symbol">◉</span></button>
+      <button data-model="muscle" class="model" aria-pressed="false"><span class="model-no">02</span><span><b>근육 조직</b><small>움직임을 만드는 구조</small></span><span class="model-symbol">≋</span></button>
+      <button data-model="heart" class="model" aria-pressed="false"><span class="model-no">03</span><span><b>심장</b><small>온몸으로 이어지는 순환</small></span><span class="model-symbol">♡</span></button>
+    </nav>
+    <section class="workspace">
+      <div class="viewer-panel">
+        <div class="viewer-top"><span class="live-dot"></span><span id="model-title">동물세포</span><span class="tag">교육용 구조 모형</span></div>
+        <div id="viewport" tabindex="0" aria-label="3D 모형. 드래그하여 회전하고 휠로 확대합니다. 부위는 오른쪽 목록에서도 선택할 수 있습니다."><div id="labels"></div><div id="tooltip" role="tooltip" hidden></div><div id="error" hidden></div><span class="axis-note">3D INTERACTIVE VIEW</span></div>
+        <div class="toolbar"><button id="reset" title="처음 방향으로 돌아가기">↺ <span>처음 방향</span></button><button id="labels-toggle" aria-pressed="false">명칭 표시</button><button id="inside" aria-pressed="true">내부 보기</button><button id="spin" aria-pressed="false">자동 회전</button><button id="fullscreen" title="전체 화면">⛶ <span>전체 화면</span></button></div>
+        <div class="gesture"><span>↔ 드래그: 회전</span><span>⊕ 휠 / 두 손가락: 확대</span><span>☝ 부위 클릭: 설명</span></div>
+      </div>
+      <aside class="sidebar">
+        <div class="detail" aria-live="polite"><div class="detail-overline"><span id="detail-category">구조 탐구</span><span id="part-count"></span></div><h2 id="part-name">궁금한 부위를 선택하세요</h2><p id="part-english" class="english">SELECT A STRUCTURE</p><p id="part-desc">모형에 마우스를 올리면 이름이 나타납니다. 부위를 누르면 위치와 기능을 확인할 수 있어요.</p><div id="location-box" hidden><h3>어디에 있나요?</h3><p id="part-location"></p></div><div class="connection"><span>탐구 포인트</span><p id="connection-text"></p></div></div>
+        <div class="parts-panel"><div class="parts-heading"><h3>부위 찾아보기</h3><button id="clear-selection">선택 해제</button></div><label class="search"><span>⌕</span><input id="search" type="search" placeholder="명칭으로 찾기" aria-label="부위 이름 검색"></label><div id="parts-list"></div></div>
+      </aside>
+    </section>
+    <footer><p>도안을 참고하여 재구성한 교육용 모형입니다. 색과 크기·배치는 구조 이해를 위해 단순화했습니다.</p><button id="reference">원본 도안 보기 ↗</button></footer>
+  </main>
+  <dialog id="reference-dialog"><div class="dialog-heading"><h2 id="reference-title">원본 도안</h2><button id="close-reference" autofocus aria-label="도안 닫기">✕</button></div><img id="reference-image" alt="현재 모형 제작에 참고한 여러 방향의 원본 도안"><p>3D 모형은 이 도안의 색과 형태를 참고해 재구성했습니다.</p></dialog>
+  <noscript>이 탐구실을 사용하려면 브라우저에서 JavaScript를 켜 주세요.</noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
