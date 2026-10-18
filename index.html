@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중학교 과학 시뮬레이션 모음 (Science Simulations)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #1a2a40;
+    }
+    p.desc {
+      font-size: 1.05rem;
+      color: #666;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border: 1px solid #e1e7ef;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #2b6cb0;
+      background: #ebf4ff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+      color: #2d3748;
+    }
+    p.card-desc {
+      font-size: 0.95rem;
+      color: #718096;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    a.btn {
+      display: inline-block;
+      background: #3182ce;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    a.btn:hover {
+      background: #2b6cb0;
+    }
+    a.btn-sub {
+      background: #edf2f7;
+      color: #4a5568;
+    }
+    a.btn-sub:hover {
+      background: #e2e8f0;
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.85rem;
+      color: #a0aec0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔬 중학교 과학 가상 실험실 & 시뮬레이션</h1>
+      <p class="desc">개별 과학 시뮬레이션을 한 곳에서 실행할 수 있는 통합 포털입니다.</p>
+    </header>
+
+    <div class="grid">
+      <!-- 1. 전동기 시뮬레이션 -->
+      <div class="card">
+        <div>
+          <span class="tag">물리 / 전자기</span>
+          <h2>⚡ 전동기(모터) 시뮬레이션</h2>
+          <p class="card-desc">자기장 속 전류가 흐르는 도선이 받는 힘(전자기력)의 원리와 정류자 및 코일 회전 원리를 입체적으로 관찰하고 실습합니다.</p>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="./simulations/motor/index.html">전동기 기본 실행</a>
+          <a class="btn btn-sub" href="./simulations/motor/coil.html">코일 실험</a>
+          <a class="btn btn-sub" href="./simulations/motor/commutator.html">정류자 실험</a>
+        </div>
+      </div>
+
+      <!-- 2. 분자 시뮬레이션 -->
+      <div class="card">
+        <div>
+          <span class="tag">화학 / 분자 구조</span>
+          <h2>🧪 3D 분자 시뮬레이션</h2>
+          <p class="card-desc">물, 이산화탄소, 메테인 등 다양한 분자의 결합 구조와 공간 배치를 3D WebGL 그래픽으로 자유롭게 회전하며 탐구합니다.</p>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="./simulations/molecule/index.html">분자 시뮬레이션 실행</a>
+        </div>
+      </div>
+
+      <!-- 3. 이온 이동 실험 보고서 -->
+      <div class="card">
+        <div>
+          <span class="tag">화학 / 이온</span>
+          <h2>🔋 이온의 이동 가상 실험 & 보고서</h2>
+          <p class="card-desc">전원 장치와 전극을 연결하여 수용액 속 양이온과 음이온이 어느 극으로 이동하는지 관찰하고 실험 보고서를 작성합니다.</p>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="./simulations/ion/index.html">이온 이동 실험 실행</a>
+        </div>
+      </div>
+
+      <!-- 4. 원자 시뮬레이션 -->
+      <div class="card">
+        <div>
+          <span class="tag">화학 / 원자 구조</span>
+          <h2>⚛️ 3D 원자 모형 시뮬레이션</h2>
+          <p class="card-desc">원자핵(양성자, 중성자)과 전자 껍질을 도는 전자의 배치를 3D Unity WebGL 환경에서 직접 조작하며 학습합니다.</p>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="./simulations/atom/index.html">원자 시뮬레이션 실행</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>마석중학교 과학 수업 시뮬레이션 통합 플랫폼 &copy; 2026</p>
+    </footer>
+  </div>
+</body>
+</html>

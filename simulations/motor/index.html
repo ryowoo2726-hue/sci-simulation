@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>직류 전동기 3D 모델 (v1.0.1)</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f7f8;font-family:system-ui,"Noto Sans KR",sans-serif}body{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:100dvh}#stage{grid-column:1;min-width:0;min-height:0;touch-action:none}canvas{display:block;width:100%;height:100%}.note{position:fixed;right:318px;bottom:16px;color:#72808b;font-size:12px;pointer-events:none}.panel{grid-column:2;position:relative;width:100%;padding:18px;background:#fffffff0;border-left:1px solid #d5dde2;box-shadow:-10px 0 28px #27374612;color:#22313b;overflow:auto;z-index:2}.panel h1{font-size:17px;margin:0 0 13px}.control{border-top:1px solid #e0e6e9;padding:11px 0}.control:first-of-type{border-top:0}.row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:7px}.value{font-weight:700;color:#1770a5}input[type=range]{width:100%;accent-color:#2788bd;min-height:26px}.btns{display:flex;gap:7px}.btns button{flex:1;border:1px solid #c8d5dc;background:#f5f8f9;color:#263841;border-radius:8px;padding:10px 7px;min-height:44px;font-weight:700;cursor:pointer}.btns button.active{background:#247cad;color:#fff;border-color:#247cad}.status{margin:11px 0 0;padding-top:10px;border-top:1px solid #e0e6e9;color:#526570;font-size:12px;line-height:1.5}@media(max-width:1050px){body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto}.panel{grid-column:1;grid-row:2;border-left:0;border-top:1px solid #d5dde2;box-shadow:0 -8px 22px #27374612;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 15px;padding:12px 16px}.panel h1,.status{grid-column:1/-1}.panel h1{margin:0 0 3px}.control{padding:8px 0}.status{margin:4px 0 0;padding-top:7px}.note{display:none}}@media(max-width:680px){.panel{grid-template-columns:1fr 1fr;max-height:46dvh;overflow:auto}.panel h1,.status{grid-column:1/-1}.control:nth-of-type(3){grid-column:1/-1}}
+  </style>
+</head>
+<body>
+  <a href="coil.html" style="position:fixed;top:16px;left:16px;z-index:10;background:#247cad;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">🧲 코일 자기장</a>
+  <a href="commutator.html" style="position:fixed;top:16px;left:148px;z-index:10;background:#0284c7;color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">🔄 정류자 역할 비교</a>
+  <div class="note">마우스 드래그: 회전 · 휠: 확대/축소</div>
+  <div id="stage"></div>
+  <section class="panel">
+    <h1>직류 전동기 제어</h1>
+    <div class="control"><div class="row"><span>자기장 세기</span><output id="fieldValue" class="value">100%</output></div><input id="field" type="range" min="0" max="500" value="100"></div>
+    <div class="control"><div class="row"><span>전류 세기</span><output id="currentValue" class="value">100%</output></div><input id="current" type="range" min="0" max="200" value="100"></div>
+    <div class="control"><div class="row"><span>회전 제어</span></div><div class="btns"><button id="play" class="active" type="button">❚❚ 일시정지</button></div></div>
+    <div class="control"><div class="row"><span>자석 위치</span></div><div class="btns"><button id="poles" type="button">N · S 위치 바꾸기</button></div></div>
+    <div class="control"><div class="row"><span>전류 방향</span></div><div class="btns"><button id="forward" class="active" type="button">+ → −</button><button id="reverse" type="button">− → +</button></div></div>
+    <p class="status" id="status">정류자와 렌츠의 법칙에 따른 유도 감쇠를 적용했습니다.</p>
+  </section>
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"}}
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const scene=new THREE.Scene();scene.background=new THREE.Color(0xf5f7f8);
+    const camera=new THREE.PerspectiveCamera(36,innerWidth/innerHeight,.1,100);camera.position.set(8,6.2,10.5);
+    const stage=document.querySelector('#stage');const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;stage.appendChild(renderer.domElement);
+    const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,.1,0);controls.enableDamping=true;controls.minDistance=7;controls.maxDistance=19;
+
+    scene.add(new THREE.HemisphereLight(0xffffff,0x9aa8b3,2.3));
+    const key=new THREE.DirectionalLight(0xffffff,3.2);key.position.set(5,9,7);key.castShadow=true;key.shadow.mapSize.set(2048,2048);scene.add(key);
+    const fill=new THREE.DirectionalLight(0xb8d9ff,1.2);fill.position.set(-7,3,5);scene.add(fill);
+    const floor=new THREE.Mesh(new THREE.PlaneGeometry(22,18),new THREE.MeshStandardMaterial({color:0xe9edef,roughness:.92}));floor.rotation.x=-Math.PI/2;floor.position.y=-2.65;floor.receiveShadow=true;scene.add(floor);
+
+    function roundedBox(w,h,d,r,material){
+      const s=new THREE.Shape();const x=-w/2,y=-h/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
+      const g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelSegments:3,bevelSize:r*.35,bevelThickness:r*.35});g.translate(0,0,-d/2);const m=new THREE.Mesh(g,material);m.castShadow=true;m.receiveShadow=true;return m;
+    }
+    function sprite(text,color='#17242d',size=.34){const c=document.createElement('canvas');c.width=512;c.height=160;const x=c.getContext('2d');x.font='700 72px sans-serif';x.font='700 72px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillStyle=color;x.fillText(text,256,82);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));s.scale.set(size*4,size*1.25,1);s.userData={canvas:c,context:x};return s}
+    function setSprite(s,text,color){const {canvas,context}=s.userData;context.clearRect(0,0,canvas.width,canvas.height);context.font='700 72px sans-serif';context.textAlign='center';context.textBaseline='middle';context.fillStyle=color;context.fillText(text,256,82);s.material.map.needsUpdate=true}
+    function tube(points,r,material,closed=false,parent=scene){const curve=new THREE.CatmullRomCurve3(points,closed,'centripetal');const m=new THREE.Mesh(new THREE.TubeGeometry(curve,48,r,12,closed),material);m.castShadow=true;parent.add(m);return m}
+
+    const red=new THREE.MeshStandardMaterial({color:0xe65132,roughness:.3,metalness:.18});
+    const blue=new THREE.MeshStandardMaterial({color:0x287db1,roughness:.3,metalness:.18});
+    const copper=new THREE.MeshStandardMaterial({color:0xc77a3a,roughness:.24,metalness:.7,emissive:0x000000});
+    const brass=new THREE.MeshStandardMaterial({color:0xd6a643,roughness:.22,metalness:.75});
+    const steel=new THREE.MeshStandardMaterial({color:0x9caab2,roughness:.25,metalness:.8});
+    const carbon=new THREE.MeshStandardMaterial({color:0x30373a,roughness:.62,metalness:.18});
+    const darkWire=new THREE.MeshStandardMaterial({color:0x55636c,roughness:.42,metalness:.48});
+
+    // 고정자 N, S
+    const north=roundedBox(2.25,2.45,2.55,.16,red);north.position.set(-3.25,.85,0);scene.add(north);
+    const south=roundedBox(2.25,2.45,2.55,.16,blue);south.position.set(3.25,.85,0);scene.add(south);
+    const nFace=sprite('N','#ffffff',.48);nFace.position.set(-3.25,.78,1.31);scene.add(nFace);
+    const sFace=sprite('S','#ffffff',.48);sFace.position.set(3.25,.78,1.31);scene.add(sFace);
+
+    // 중앙 회전자: 사각 코일과 전류 공급선은 처음에 모두 XY 평면(z=0)에 있습니다.
+    // 자기장(+X) 속에서 양쪽 세로 도선의 힘은 서로 반대인 ±Z 방향이 되어 Y축 토크를 만듭니다.
+    const rotorPivot=new THREE.Group();rotorPivot.rotation.x=Math.PI/2;rotorPivot.position.z=-.9;scene.add(rotorPivot);const rotor=new THREE.Group();rotorPivot.add(rotor);
+    // 정류자 → 사각 코일 → 정류자를 하나의 끊김 없는 구리 도선으로 연결합니다.
+    const armaturePoints=[new THREE.Vector3(-.26,-.91,0),new THREE.Vector3(-.78,-.37,0),new THREE.Vector3(-1.65,-.02,0),new THREE.Vector3(-1.65,1.82,0),new THREE.Vector3(1.65,1.82,0),new THREE.Vector3(1.65,-.02,0),new THREE.Vector3(.78,-.37,0),new THREE.Vector3(.26,-.91,0)];
+    const armatureCurve=new THREE.CatmullRomCurve3(armaturePoints,false,'centripetal');const armatureWire=new THREE.Mesh(new THREE.TubeGeometry(armatureCurve,120,.105,12,false),copper);armatureWire.castShadow=true;rotor.add(armatureWire);
+    function badge(t,bg){const c=document.createElement('canvas');c.width=160;c.height=160;const x=c.getContext('2d');x.fillStyle=bg;x.beginPath();x.arc(80,80,72,0,Math.PI*2);x.fill();x.lineWidth=10;x.strokeStyle='#ffffff';x.stroke();x.fillStyle='#ffffff';x.font='bold 92px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,80,86);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));s.scale.set(.65,.65,1);return s;}
+    const labelA=badge('A','#ea580c');labelA.position.set(-1.65,.9,.22);rotor.add(labelA);
+    const labelB=badge('B','#8b5cf6');labelB.position.set(1.65,.9,.22);rotor.add(labelB);
+    const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,4.25,24),steel);shaft.position.set(0,-.12,0);shaft.rotation.set(0,0,0);shaft.castShadow=true;rotor.add(shaft);
+    const hub=new THREE.Mesh(new THREE.CylinderGeometry(.31,.31,.4,28),steel);hub.position.set(0,.9,0);hub.rotation.set(0,0,0);hub.castShadow=true;rotor.add(hub);
+
+    [-.26,.26].forEach(x=>{const joint=new THREE.Mesh(new THREE.SphereGeometry(.125,16,12),copper);joint.position.set(x,-.91,0);joint.castShadow=true;rotor.add(joint)});
+
+    // 같은 XY 평면의 두 연결선이 Y축 정류자의 서로 다른 두 조각에 연결됩니다.
+    const insulator=new THREE.Mesh(new THREE.CylinderGeometry(.405,.405,.44,32),carbon);insulator.position.y=-1.12;rotor.add(insulator);
+    [0,Math.PI].forEach(a=>{const half=new THREE.Mesh(new THREE.CylinderGeometry(.43,.43,.42,32,1,false,a+.07,Math.PI-.14),brass);half.position.y=-1.12;half.castShadow=true;rotor.add(half)});
+    const collars=[-.88,-1.36];collars.forEach(y=>{const ring=new THREE.Mesh(new THREE.TorusGeometry(.42,.032,10,30),new THREE.MeshStandardMaterial({color:0xd7e0e4,metalness:.8,roughness:.2}));ring.rotation.x=Math.PI/2;ring.position.y=y;rotor.add(ring)});
+
+    // Z축 정류자에 맞춘 좌우 브러시와 접촉부
+    const electrical=new THREE.Group();electrical.rotation.x=Math.PI/2;electrical.position.z=-.9;scene.add(electrical);const wireLeft=new THREE.MeshStandardMaterial({color:0xd5483e,metalness:.35,roughness:.4,emissive:0x000000});const wireRight=new THREE.MeshStandardMaterial({color:0x345f9b,metalness:.35,roughness:.4,emissive:0x000000});
+    [-1,1].forEach(side=>{
+      const brush=roundedBox(.92,.22,.58,.05,carbon);brush.position.set(side*.86,-1.12,0);electrical.add(brush);
+      const contact=roundedBox(.18,.16,.44,.025,brass);contact.position.set(side*.47,-1.12,0);electrical.add(contact);
+      const post=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.74,16),brass);post.position.set(side*1.12,-1.72,0);post.castShadow=true;electrical.add(post);
+      const foot=new THREE.Mesh(new THREE.CylinderGeometry(.22,.25,.12,20),steel);foot.position.set(side*1.12,-2.08,0);foot.castShadow=true;electrical.add(foot);
+      tube([new THREE.Vector3(side*1.05,-1.14,0),new THREE.Vector3(side*1.12,-1.48,0),new THREE.Vector3(side*1.12,-1.72,0)],.055,darkWire,false,electrical);
+      tube([new THREE.Vector3(side*1.12,-2.08,0),new THREE.Vector3(side*1.75,-2.2,0),new THREE.Vector3(side*2.45,-2.2,0)],.055,side<0?wireLeft:wireRight,false,electrical);
+    });
+
+    // 사진의 구성 명칭
+    const statorL=sprite('고정자', '#20313b',.25);statorL.position.set(-3.25,2.5,.2);scene.add(statorL);
+    const statorR=sprite('고정자', '#20313b',.25);statorR.position.set(3.25,2.5,.2);scene.add(statorR);
+    const rotorLabel=sprite('회전자','#20313b',.25);rotorLabel.position.set(0,2.05,.2);scene.add(rotorLabel);
+    const brushL=sprite('브러시','#20313b',.22);brushL.position.set(-1.65,-1.1,.5);electrical.add(brushL);
+    const brushR=sprite('브러시','#20313b',.22);brushR.position.set(1.65,-1.1,.5);electrical.add(brushR);
+    const commLabel=sprite('정류자','#20313b',.23);commLabel.position.set(0,-1.92,.55);electrical.add(commLabel);
+    // 전원 연결 극성 표시
+    const positive=sprite('+','#dc3e35',.34);positive.position.set(-2.45,-1.88,.18);electrical.add(positive);
+    const negative=sprite('−','#245da4',.34);negative.position.set(2.45,-1.88,.18);electrical.add(negative);
+    const terminalLeftMat=new THREE.MeshStandardMaterial({color:0xd5483e,emissive:0x260000,metalness:.5,roughness:.25});const terminalRightMat=new THREE.MeshStandardMaterial({color:0x345f9b,emissive:0x00172b,metalness:.5,roughness:.25});
+    const terminalLeft=new THREE.Mesh(new THREE.SphereGeometry(.13,18,14),terminalLeftMat);terminalLeft.position.set(-2.45,-2.2,0);electrical.add(terminalLeft);
+    const terminalRight=new THREE.Mesh(new THREE.SphereGeometry(.13,18,14),terminalRightMat);terminalRight.position.set(2.45,-2.2,0);electrical.add(terminalRight);
+
+    let fieldStrength=1,currentStrength=1,currentDirection=1,poleDirection=1,angle=0,omega=0,running=true;
+    const fieldInput=document.querySelector('#field'),currentInput=document.querySelector('#current'),fieldValue=document.querySelector('#fieldValue'),currentValue=document.querySelector('#currentValue'),status=document.querySelector('#status'),playButton=document.querySelector('#play');
+    function updateElectricalAppearance(){
+      const forward=currentDirection>0;wireLeft.color.setHex(forward?0xd5483e:0x345f9b);wireRight.color.setHex(forward?0x345f9b:0xd5483e);wireLeft.emissive.setHex(forward?0x260000:0x00172b);wireRight.emissive.setHex(forward?0x00172b:0x260000);copper.color.setHex(forward?0xc77a3a:0x398eae);copper.emissive.setHex(forward?0x2a0900:0x001827);
+      positive.position.x=forward?-2.45:2.45;negative.position.x=forward?2.45:-2.45;setSprite(positive,'+','#dc3e35');setSprite(negative,'−','#245da4');terminalLeftMat.color.setHex(forward?0xd5483e:0x345f9b);terminalRightMat.color.setHex(forward?0x345f9b:0xd5483e);terminalLeftMat.emissive.setHex(forward?0x260000:0x00172b);terminalRightMat.emissive.setHex(forward?0x00172b:0x260000);
+      document.querySelector('#forward').classList.toggle('active',forward);document.querySelector('#reverse').classList.toggle('active',!forward);
+    }
+    function swapPoles(){poleDirection*=-1;north.position.x=-3.25*poleDirection;south.position.x=3.25*poleDirection;nFace.position.x=north.position.x;sFace.position.x=south.position.x;}
+    fieldInput.addEventListener('input',e=>{fieldStrength=+e.target.value/100;fieldValue.textContent=e.target.value+'%'});
+    currentInput.addEventListener('input',e=>{currentStrength=+e.target.value/100;currentValue.textContent=e.target.value+'%'});
+    document.querySelector('#poles').addEventListener('click',swapPoles);
+    document.querySelector('#forward').addEventListener('click',()=>{currentDirection=1;updateElectricalAppearance()});
+    document.querySelector('#reverse').addEventListener('click',()=>{currentDirection=-1;updateElectricalAppearance()});
+    playButton.addEventListener('click',()=>{running=!running;playButton.textContent=running?'❚❚ 일시정지':'▶ 다시 시작';playButton.classList.toggle('active',running);if(!running)omega=0;});
+    updateElectricalAppearance();
+    const clock=new THREE.Clock();
+    function render(){requestAnimationFrame(render);const dt=Math.min(clock.getDelta(),.04);if(running){const B=fieldStrength*poleDirection;const I=currentStrength*currentDirection;const commutator=Math.sign(Math.cos(angle))||1;const motorTorque=-B*I*commutator*Math.cos(angle)*2.65;const lenzTorque=-omega*(.07+.12*Math.abs(B));omega+=(motorTorque+lenzTorque-.025*omega)*dt;omega=Math.max(-18,Math.min(18,omega));angle+=omega*dt;rotor.rotation.y=angle;const glow=.025+.1*fieldStrength;red.emissive.setRGB(glow,.006,.003);blue.emissive.setRGB(.002,.015,glow*.45);status.textContent=`회전 속도 ${Math.abs(omega).toFixed(1)} rad/s · 정류자가 반바퀴마다 코일 전류를 바꾸고, 유도 전류는 회전 변화를 줄이는 방향(렌츠의 법칙)으로 작용합니다.`}else{status.textContent='일시정지 상태입니다. 다시 시작을 누르면 현재 위치에서 회전합니다.'}controls.update();renderer.render(scene,camera)}
+    function resize(){const w=stage.clientWidth,h=stage.clientHeight;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h)}resize();render();
+    addEventListener('resize',resize);
+  </script>
+</body>
+</html>
