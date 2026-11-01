@@ -1,150 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>혈액 3D 관찰과 원심분리</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <style>
-      body { background:#eef2f7; color:#243145; font:16px/1.5 system-ui,sans-serif; padding:24px 14px; }
-      .intro { max-width:960px; margin:0 auto 16px; }
-      .intro a { color:#1764a4; }
-      .intro h1 { font-size:1.5rem; margin:8px 0; }
-      .intro p { margin:4px 0; }
-      #unity-container.unity-desktop { position:relative; left:auto; top:auto; transform:none; width:min(100%,960px); margin:auto; }
-      #unity-container.unity-desktop #unity-canvas { width:100% !important; height:auto !important; aspect-ratio:8/5; display:block; }
-      #unity-footer { background:#fff; }
-    </style>
-  </head>
-  <body>
-    <header class="intro">
-      <a href="../../">← 과학 시뮬레이션 목록</a>
-      <h1>혈액 3D 관찰과 원심분리</h1>
-      <p>구성 요소를 선택하고 드래그해 회전하세요. 분자의 원자를 클릭하면 원소 설명을 볼 수 있습니다.</p>
-      <p>원심분리는 항응고 처리한 혈액의 층을 보여 주는 교육용 애니메이션입니다. 처음 실행할 때 약 33MB를 내려받습니다.</p>
-    </header>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">혈액 3D 관찰</div>
-      </div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebBuild.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/WebBuild.data.unityweb",
-        frameworkUrl: buildUrl + "/WebBuild.framework.js.unityweb",
-        codeUrl: buildUrl + "/WebBuild.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "BloodUnity",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
-      };
-
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
-
-      document.querySelector("#unity-loading-bar").style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>혈액·혈관과 심장 3D 탐구실</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#203047;font:16px/1.55 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+    main{width:min(100% - 32px,1680px);margin:auto;padding:24px 0 48px}a{color:#165e9d}a:focus-visible,button:focus-visible{outline:3px solid #db8d00;outline-offset:3px}
+    .back{font-size:.95rem;font-weight:600;text-decoration:none}.eyebrow{margin:20px 0 5px;color:#17658b;font-weight:700;letter-spacing:.04em;font-size:.83rem}
+    h1{margin:0;font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.25;color:#152c42}header p{max-width:900px;margin:10px 0 0;color:#495e71}
+    .route{display:flex;flex-wrap:wrap;align-items:center;gap:5px 10px;margin:20px 0;padding:13px 17px;background:#fff;border:1px solid #d8e5ec;border-radius:10px;color:#395365}
+    .route strong{color:#194d65}.route span{color:#668493}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+    .controls-label{font-weight:700;margin-right:5px}button{font:inherit;border:1px solid #aebecb;background:#fff;color:#294457;border-radius:8px;padding:9px 15px;cursor:pointer}
+    button:hover{background:#e0eff3}button[aria-pressed="true"]{background:#176b71;border-color:#176b71;color:#fff;font-weight:700}.hint{margin:0 0 16px;font-size:.9rem;color:#506579}
+    .workbench{display:grid;grid-template-columns:1fr;gap:16px}.workbench.compare{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .panel{min-width:0;background:#fff;border:1px solid #d4dfe7;border-radius:12px;box-shadow:0 5px 20px #193a5010;overflow:hidden}.panel[hidden]{display:none}
+    .panel-header{min-height:82px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-header h2{font-size:1.13rem;margin:0;color:#19364a}.panel-header p{font-size:.87rem;margin:2px 0 0;color:#566e7d}.panel-header a{flex-shrink:0;font-size:.9rem;font-weight:600;text-decoration:none}
+    iframe{width:100%;aspect-ratio:8/5;border:0;display:block;background:#09121b}.details{margin:16px 2px 0;color:#485f6e;font-size:.91rem}.details p{margin:6px 0}.details a{color:#165e9d}
+    @media(max-width:900px){.workbench.compare{grid-template-columns:1fr}.panel-header{min-height:70px}.controls{gap:6px}button{padding:8px 12px}.route{gap:4px 7px;font-size:.9rem}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <a class="back" href="../../">← 과학 시뮬레이션 목록</a>
+    <p class="eyebrow">생명 · 동물과 에너지</p>
+    <h1>혈액·혈관과 심장 3D 탐구실</h1>
+    <p>혈액과 혈관의 구성, 심장의 구조와 혈액의 이동을 한 페이지에서 관찰하세요. 두 화면은 각각 독립적으로 조작할 수 있습니다.</p>
+  </header>
+  <div class="route" aria-label="혈액 순환의 큰 경로"><strong>혈액의 길</strong> 온몸 <span>→</span> 우심방 <span>→</span> 우심실 <span>→</span> 폐 <span>→</span> 좌심방 <span>→</span> 좌심실 <span>→</span> 온몸</div>
+  <nav class="controls" aria-label="관찰 화면 선택">
+    <span class="controls-label">화면 보기</span>
+    <button type="button" data-view="compare" aria-pressed="true">나란히 보기</button>
+    <button type="button" data-view="blood" aria-pressed="false">혈액·혈관 크게 보기</button>
+    <button type="button" data-view="heart" aria-pressed="false">심장 크게 보기</button>
+  </nav>
+  <p class="hint" id="view-hint" aria-live="polite">각 화면을 드래그해 회전하세요. 글씨가 작으면 크게 보기나 전체 화면을 이용하세요.</p>
+  <div class="workbench compare" id="workbench">
+    <section class="panel" id="blood-panel" aria-labelledby="blood-title">
+      <div class="panel-header"><div><h2 id="blood-title">혈액·혈관 3D 관찰</h2><p>혈구, 혈관, 혈장 성분과 원심분리</p></div><a href="blood-simulation.html" target="_blank" rel="noopener">전체 화면 ↗</a></div>
+      <iframe id="blood-frame" title="혈액과 혈관 3D 시뮬레이션" data-src="blood-simulation.html?embed=1" allow="fullscreen; autoplay" allowfullscreen></iframe>
+    </section>
+    <section class="panel" id="heart-panel" aria-labelledby="heart-title">
+      <div class="panel-header"><div><h2 id="heart-title">심장과 혈액의 길</h2><p>심장 단면, 판막과 혈액 이동 따라가기</p></div><a href="../heart-3d/" target="_blank" rel="noopener">전체 화면 ↗</a></div>
+      <iframe id="heart-frame" title="심장의 혈액 순환 3D 시뮬레이션" data-src="../heart-3d/?embed=1" allow="fullscreen; autoplay" allowfullscreen></iframe>
+    </section>
+  </div>
+  <div class="details">
+    <p>혈액은 심장에서 동맥으로 나가고, 정맥을 통해 심장으로 돌아옵니다. 폐에서는 혈액이 산소를 받아들입니다.</p>
+    <p>학습용 3D 모델과 경로 표현입니다. 심장 모델 출처: <a href="../heart-3d/ATTRIBUTION.txt">Z-Anatomy / BodyParts3D</a>.</p>
+  </div>
+</main>
+<script>
+  const workbench=document.querySelector('#workbench');
+  const panels={blood:document.querySelector('#blood-panel'),heart:document.querySelector('#heart-panel')};
+  const frames={blood:document.querySelector('#blood-frame'),heart:document.querySelector('#heart-frame')};
+  const buttons=[...document.querySelectorAll('[data-view]')];
+  const hints={compare:'각 화면을 드래그해 회전하세요. 글씨가 작으면 크게 보기나 전체 화면을 이용하세요.',blood:'혈액·혈관을 크게 관찰합니다. 심장 화면을 열거나 나란히 볼 수 있습니다.',heart:'심장을 크게 관찰합니다. 혈액·혈관 화면을 열거나 나란히 볼 수 있습니다.'};
+  function show(view){
+    if(!['compare','blood','heart'].includes(view))view='compare';
+    workbench.classList.toggle('compare',view==='compare');
+    for(const name of ['blood','heart']){
+      const visible=view==='compare'||view===name;
+      panels[name].hidden=!visible;
+      if(visible&&!frames[name].hasAttribute('src'))frames[name].src=frames[name].dataset.src;
+    }
+    for(const button of buttons)button.setAttribute('aria-pressed',String(button.dataset.view===view));
+    document.querySelector('#view-hint').textContent=hints[view];
+    const url=new URL(location.href);url.searchParams.set('view',view);history.replaceState(null,'',url);
+  }
+  for(const button of buttons)button.addEventListener('click',()=>show(button.dataset.view));
+  const requested=new URL(location.href).searchParams.get('view');
+  show(requested||((window.matchMedia('(max-width: 900px)').matches)?'blood':'compare'));
+</script>
+</body>
 </html>

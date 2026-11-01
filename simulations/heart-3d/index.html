@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>심장과 혈액의 길 · 3D 탐구실</title>
+  <script>if(new URLSearchParams(location.search).has('embed'))document.documentElement.classList.add('embedded');</script>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#203047;font:16px/1.5 system-ui,-apple-system,"Malgun Gothic",sans-serif}
+    main{width:min(100% - 28px,1440px);margin:auto;padding:24px 0 36px}a{color:#165f9b}h1{font-size:1.5rem;margin:8px 0}p{margin:5px 0}.intro{margin-bottom:16px}
+    .stage{position:relative;overflow:hidden;background:#081019;border-radius:9px}canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;outline:none;background:#081019}
+    .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#e6f4f2;background:#0c1924;text-align:center;padding:24px}
+    progress{width:min(70%,360px);height:12px;accent-color:#4fd6b9}.status{min-height:1.6em}.error{color:#ffd6b5}.actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px}
+    button{font:inherit;color:#fff;background:#176b71;border:0;border-radius:7px;padding:9px 15px;cursor:pointer}button:disabled{opacity:.5;cursor:default}button:focus-visible,a:focus-visible{outline:3px solid #db8d00;outline-offset:3px}
+    .sources{font-size:.88rem;color:#586e7b;margin-top:16px}.sources p{margin:4px 0}html.embedded body{background:#081019}html.embedded main{width:100%;padding:0}html.embedded .intro,html.embedded .actions,html.embedded .sources{display:none}html.embedded .stage{border-radius:0}
+  </style>
+</head>
+<body>
+<main>
+  <header class="intro"><a href="../blood-3d/?view=compare">← 혈액·혈관과 함께 보기</a><h1>심장과 혈액의 길</h1><p>혈액을 따라가며 심장 단면과 네 판막의 움직임을 관찰하세요. 오른쪽 드래그로 회전하고 휠로 확대할 수 있습니다.</p></header>
+  <div class="stage">
+    <canvas id="heart-canvas" width="1600" height="900" tabindex="0" aria-label="심장 혈액 순환 3D 시뮬레이션"></canvas>
+    <div class="loading" id="loading" role="status" aria-live="polite"><strong>심장 3D 모델을 준비하고 있어요</strong><progress id="progress" max="100" value="0"></progress><span class="status" id="status">처음 실행할 때 약 12MB를 내려받습니다.</span></div>
+  </div>
+  <div class="actions"><span>혈액 따라가기 · 자유 관찰 · 확인 문제</span><button id="fullscreen" type="button" disabled>전체 화면</button></div>
+  <footer class="sources"><p>심장 형상: Z-Anatomy / BodyParts3D · CC BY-SA 4.0. <a href="ATTRIBUTION.txt">모델 출처와 이용 조건</a></p><p>폰트: Noto Sans KR · <a href="NotoSansKR-LICENSE.txt">SIL Open Font License</a>. 혈액 입자와 이동 경로는 학습용 표현입니다.</p></footer>
+</main>
+<script>
+  const canvas=document.querySelector('#heart-canvas');
+  const loading=document.querySelector('#loading');
+  const progress=document.querySelector('#progress');
+  const status=document.querySelector('#status');
+  canvas.addEventListener('contextmenu',event=>event.preventDefault());
+  function failed(error){status.classList.add('error');status.textContent='3D 화면을 불러오지 못했습니다. WebGL을 지원하는 브라우저에서 새로고침해 주세요. '+String(error);progress.hidden=true;}
+  const config={
+    dataUrl:'Build/HeartWeb.data.unityweb',frameworkUrl:'Build/HeartWeb.framework.js.unityweb',codeUrl:'Build/HeartWeb.wasm.unityweb',
+    streamingAssetsUrl:'StreamingAssets',companyName:'Maseok Science',productName:'심장의 혈액 순환',productVersion:'1.0',
+    devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),
+    showBanner:(message,type)=>{if(type==='error')failed(message);}
+  };
+  const loader=document.createElement('script');loader.src='Build/HeartWeb.loader.js';
+  loader.onerror=()=>failed('실행 파일을 찾을 수 없습니다.');
+  loader.onload=()=>createUnityInstance(canvas,config,value=>{progress.value=Math.round(value*100);status.textContent='모델 불러오는 중 '+Math.round(value*100)+'%';}).then(instance=>{
+    loading.hidden=true;loading.style.display='none';const button=document.querySelector('#fullscreen');button.disabled=false;button.addEventListener('click',()=>instance.SetFullscreen(1));
+  }).catch(failed);
+  document.body.appendChild(loader);
+</script>
+</body>
+</html>

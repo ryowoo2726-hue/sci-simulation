@@ -1,0 +1,11 @@
+﻿Z-Anatomy heart derivative · 2026-11-01
+
+Upstream: https://github.com/Z-Anatomy/Models-of-human-anatomy
+Archive: https://raw.githubusercontent.com/Z-Anatomy/Models-of-human-anatomy/master/Z-Anatomy.zip
+Archive SHA256: e029688545627bd0214b269e1063143abb580aad72b2c2445d6d8a9a0d9da736
+Input file: Z-Anatomy/Startup.blend
+Derived binary SHA256: aaa6b2de34590b48c27e37481fc53d5eb04f4e8271a8567d5b938f4d5a4af6e7
+Derived binary: 33 structures / 94,306 vertices / 186,463 triangles.
+Extraction: Blender 5.2.2 LTS, embedded source scripts disabled.
+
+See ATTRIBUTION.md and Z-Anatomy-License.txt for credits and model usage terms.
