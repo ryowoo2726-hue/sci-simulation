@@ -20,6 +20,18 @@ public static class BuildAlveoli
     [MenuItem("Alveoli/Create or rebuild simulation scene")]
     public static void CreateScene()
     {
+        var graphics = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/GraphicsSettings.asset")[0]);
+        var shaders = graphics.FindProperty("m_AlwaysIncludedShaders");
+        foreach (var shaderName in new[] { "Heart/LivingTissue", "Heart/AnatomyGhost" })
+        {
+            var shader = Shader.Find(shaderName);
+            if (shader == null) throw new Exception("Missing shader: " + shaderName);
+            bool included = false;
+            for (int i = 0; i < shaders.arraySize; i++)
+                if (shaders.GetArrayElementAtIndex(i).objectReferenceValue == shader) included = true;
+            if (!included) { int index = shaders.arraySize; shaders.InsertArrayElementAtIndex(index); shaders.GetArrayElementAtIndex(index).objectReferenceValue = shader; }
+        }
+        graphics.ApplyModifiedPropertiesWithoutUndo();
         var pipeline = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>("Assets/LungGasExchange/Rendering/HeartURP.asset");
         GraphicsSettings.defaultRenderPipeline = pipeline; QualitySettings.renderPipeline = pipeline;
         PlayerSettings.companyName = "Science Classroom"; PlayerSettings.productName = "허파꽈리 기체 교환";
@@ -36,6 +48,18 @@ public static class BuildAlveoli
         if (mesh.vertexCount < 500 || mesh.bounds.size.y >= mesh.bounds.size.x) throw new Exception("Invalid biconcave red cell");
         if (AlveolarGeometry.ReadAtoms("Molecules/Oxygen").Length != 2) throw new Exception("Invalid O2");
         Debug.Log("ALVEOLI_EDITOR_CHECK_PASS");
+    }
+    public static void BuildWebGL()
+    {
+        CreateScene();
+        // GitHub Pages does not configure Unity's compressed-content response headers.
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+        PlayerSettings.WebGL.template = "APPLICATION:Default";
+        var output = Path.GetFullPath("../Alveoli-WebGL");
+        Directory.CreateDirectory(output);
+        var result = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, output, BuildTarget.WebGL, BuildOptions.None);
+        if (result.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded) throw new Exception("WebGL build failed: " + result.summary.result);
+        Debug.Log("ALVEOLI_WEBGL_BUILD_PASS");
     }
     public static void Build()
     {
