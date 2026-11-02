@@ -1,157 +1,57 @@
-<!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | 허파꽈리 기체 교환</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">허파꽈리 기체 교환</div>
-      </div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Alveoli-WebGL.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/Alveoli-WebGL.data",
-        frameworkUrl: buildUrl + "/Alveoli-WebGL.framework.js",
-        codeUrl: buildUrl + "/Alveoli-WebGL.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Science Classroom",
-        productName: "허파꽈리 기체 교환",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
-      };
-
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
-
-      document.querySelector("#unity-loading-bar").style.display = "block";
-
-      // shortcut: segmented uploads avoid the current upload limit; use whole files when the connection allows it.
-      async function loadBuildFile(name, count, type) {
-        var parts = await Promise.all(Array.from({length: count}, async (_, i) => {
-          for (var attempt = 0; attempt < 3; attempt++) {
-            try {
-              var response = await fetch(buildUrl + '/' + name + '.gz.' + String(i).padStart(2, '0'));
-              if (!response.ok) throw new Error('실행 파일을 불러오지 못했습니다: ' + response.status);
-              return await response.arrayBuffer();
-            } catch (error) { if (attempt === 2) throw error; }
-          }
-        }));
-        var stream = new Blob(parts).stream().pipeThrough(new DecompressionStream('gzip'));
-        return URL.createObjectURL(new Blob([await new Response(stream).arrayBuffer()], {type: type}));
-      }
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = async () => {
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>허파꽈리 기체 교환 3D</title><link rel="icon" href="data:,"><style>
+body{margin:0;min-height:100vh;background:#08131b;color:#e3edf0;font:16px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;flex-direction:column}header,.player{width:min(1440px,calc(100vw - 24px),calc(160vh - 128px))}header{display:flex;justify-content:space-between;align-items:center;margin:12px 0}a{color:#9ddde7}button{font:inherit;padding:8px 14px;cursor:pointer}.player{aspect-ratio:8/5;position:relative;background:#08131b}canvas{width:100%;height:100%;display:block}.loading{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:18px;background:#08131b;text-align:center;padding:24px}.loading h1{font-size:24px;margin:0}progress{width:min(480px,80vw);height:20px;accent-color:#45cada}#status{max-width:650px;line-height:1.6}#retry[hidden]{display:none}
+</style></head><body><header><a href="../../">← 과학 실험실</a><button id="fullscreen" disabled>전체 화면</button></header><main class="player"><canvas id="unity-canvas" width="1440" height="900" tabindex="0" aria-label="허파꽈리 기체 교환 3D 시뮬레이션"></canvas><section class="loading" id="loading"><h1>허파꽈리 기체 교환 3D</h1><progress id="progress" max="1" value="0" aria-label="실행 준비 진행률"></progress><div id="status" role="status" aria-live="polite">실행 파일을 준비하고 있습니다.</div><button id="retry" hidden>다시 시도</button></section></main><script>
+const files = [{"name":"5d0f4e6e3fa36877e48015785cec8f7f.data","count":10,"type":"application/octet-stream"},{"name":"13f23ed7a8bc244fd475a9847e9c2543.wasm","count":28,"type":"application/wasm"}];
+const progress = document.querySelector('#progress'), status = document.querySelector('#status');
+const total = files.reduce((n, file) => n + file.count, 0);
+let downloaded = 0;
+function fail(error) {
+  status.textContent = '실행 준비를 마치지 못했습니다. 연결을 확인하고 다시 시도해 주세요. ' + error.message;
+  document.querySelector('#retry').hidden = false;
+}
+document.querySelector('#retry').onclick = () => location.reload();
+async function loadBuildFile(file) {
+  const parts = new Array(file.count);
+  let next = 0;
+  // Two workers per file keep at most four downloads active.
+  await Promise.all([0, 1].map(async () => {
+    while (next < file.count) {
+      const i = next++;
+      for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          [config.dataUrl, config.codeUrl] = await Promise.all([
-            loadBuildFile('Alveoli-WebGL.data', 5, 'application/octet-stream'),
-            loadBuildFile('Alveoli-WebGL.wasm', 17, 'application/wasm')
-          ]);
-        } catch (error) {
-          unityShowBanner(error.message, 'error');
-          return;
-        }
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
-</html>
+          const response = await fetch('Build/' + file.name + '.gz.' + String(i).padStart(2, '0'), {signal: AbortSignal.timeout(45000)});
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          parts[i] = await response.arrayBuffer();
+          downloaded++;
+          progress.value = downloaded / total * .75;
+          status.textContent = '실행 파일 다운로드 중 (' + downloaded + '/' + total + ') · 처음 실행은 시간이 걸릴 수 있습니다.';
+          break;
+        } catch (error) { if (attempt === 2) throw error; }
+      }
+    }
+  }));
+  const stream = new Blob(parts).stream().pipeThrough(new DecompressionStream('gzip'));
+  return URL.createObjectURL(new Blob([await new Response(stream).arrayBuffer()], {type: file.type}));
+}
+const script = document.createElement('script');
+script.src = 'Build/b34093a5d4bb3902e297e6956eb4b095.loader.js';
+script.onerror = () => fail(new Error('실행 도구 다운로드 오류'));
+script.onload = async () => {
+  try {
+    const urls = await Promise.all(files.map(loadBuildFile));
+    status.textContent = '3D 화면을 시작하고 있습니다.';
+    const instance = await createUnityInstance(document.querySelector('#unity-canvas'), {
+      dataUrl: urls[0], codeUrl: urls[1], frameworkUrl: 'Build/b09f6c0293f7e7a70ab4d34534849e41.framework.js',
+      companyName: 'Science Classroom', productName: '허파꽈리 기체 교환', productVersion: '1.1',
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
+      showBanner: (message, type) => { if (type === 'error') fail(new Error(message)); }
+    }, value => { progress.value = .75 + value * .25; });
+    urls.forEach(url => URL.revokeObjectURL(url));
+    document.querySelector('#loading').remove();
+    document.querySelector('#fullscreen').disabled = false;
+    document.querySelector('#fullscreen').onclick = () => instance.SetFullscreen(1);
+  } catch (error) { fail(error); }
+};
+document.body.appendChild(script);
+</script></body></html>

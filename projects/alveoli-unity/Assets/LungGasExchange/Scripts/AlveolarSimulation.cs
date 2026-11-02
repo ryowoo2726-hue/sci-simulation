@@ -16,6 +16,7 @@ public class AlveolarSimulation : MonoBehaviour
     class Gas { public Transform transform; public Vector3 origin, velocity; public float phase; public bool co2, transfer, detail; }
     Transform anatomy, detail, cutRim; Camera view; Material wall, vessel, oMat, cMat; Mesh sphere, redCell;
     Vector3 previousMouse;
+    Vector3[] oxygenAtoms, carbonAtoms;
     Font font; GUIStyle title, body, small, button, heading; Texture2D panel;
     float clock, speed = 1, yaw = -9, pitch = 12, distance = 7.6f; bool paused, section = true, showGas = true, equalized, closeup;
     public static float BloodOxygen(float t, bool equilibrium) => equilibrium ? 100 : Mathf.Lerp(40, 100, 1 - Mathf.Exp(-5 * Mathf.Clamp01(t)));
@@ -36,7 +37,9 @@ public class AlveolarSimulation : MonoBehaviour
         wall = Tissue("폐포벽", new Color(.71f, .36f, .32f), true);
         vessel = new Material(Shader.Find("Heart/AnatomyGhost")); vessel.SetColor("_BaseColor", new Color(.68f, .20f, .24f, .22f));
         oMat = Tissue("산소 · 청록색 학습 표시", oxygen); cMat = Tissue("이산화 탄소 · 금색 학습 표시", carbon);
-        var primitive = GameObject.CreatePrimitive(PrimitiveType.Sphere); sphere = primitive.GetComponent<MeshFilter>().sharedMesh; Destroy(primitive);
+        sphere = AlveolarGeometry.Sac(8, 12);
+        oxygenAtoms = AlveolarGeometry.ReadAtoms("Molecules/Oxygen");
+        carbonAtoms = AlveolarGeometry.ReadAtoms("Molecules/CarbonDioxide");
         redCell = AlveolarGeometry.RedCell(); BuildAnatomy(); BuildDetail(); ResetSimulation();
         Shader.SetGlobalFloat("_SectionEnabled", 1); Shader.SetGlobalFloat("_SectionDepth", -.16f);
         if (Array.IndexOf(Environment.GetCommandLineArgs(), "-verify") >= 0) StartCoroutine(VerifyAndCapture());
@@ -65,11 +68,12 @@ public class AlveolarSimulation : MonoBehaviour
         sacs.Add(MeshObject("중앙 허파꽈리 · 절개", sacMesh, wall, anatomy, Vector3.zero, Vector3.one * 1.4f));
         cutRim = MeshObject("절개면의 얇은 조직 가장자리", AlveolarGeometry.Tube(t => new Vector3(Mathf.Cos(t * 2 * Mathf.PI) * 1.382f, Mathf.Sin(t * 2 * Mathf.PI) * 1.382f, -.224f), .018f, 160, 10), Tissue("절개 가장자리", new Color(.86f, .56f, .47f)), anatomy, Vector3.zero, Vector3.one);
         var backWall = Tissue("주변 허파꽈리", new Color(.52f, .23f, .23f));
+        var backSacMesh = AlveolarGeometry.Sac(24, 36);
         for (int i = 0; i < 8; i++)
         {
             float a = (i + .5f) * Mathf.PI * 2 / 8;
             Vector3 p = new Vector3(Mathf.Cos(a) * 1.8f, Mathf.Sin(a) * 1.55f, 1.05f + .3f * Mathf.Sin(i * 3));
-            var sac = MeshObject("주변 허파꽈리 " + i, sacMesh, backWall, anatomy, p, Vector3.one * (.65f + .12f * Mathf.Sin(i * 7)));
+            var sac = MeshObject("주변 허파꽈리 " + i, backSacMesh, backWall, anatomy, p, Vector3.one * (.65f + .12f * Mathf.Sin(i * 7)));
             sacs.Add(sac);
         }
         var airway = Tissue("폐포관", new Color(.58f, .31f, .27f));
@@ -114,7 +118,7 @@ public class AlveolarSimulation : MonoBehaviour
     Transform Molecule(bool co2, Transform parent)
     {
         var root = new GameObject(co2 ? "CO2 · SDF structure" : "O2 · SDF structure").transform; root.SetParent(parent, false);
-        Vector3[] atoms = AlveolarGeometry.ReadAtoms("Molecules/" + (co2 ? "CarbonDioxide" : "Oxygen"));
+        Vector3[] atoms = co2 ? carbonAtoms : oxygenAtoms;
         foreach (Vector3 atom in atoms) MeshObject("원자", sphere, co2 ? cMat : oMat, root, atom * .025f, Vector3.one * .035f);
         return root;
     }
@@ -176,7 +180,9 @@ public class AlveolarSimulation : MonoBehaviour
         }
         foreach (Gas g in gases)
         {
-            g.transform.gameObject.SetActive(showGas && g.detail == closeup);
+            bool visible = showGas && g.detail == closeup;
+            if (g.transform.gameObject.activeSelf != visible) g.transform.gameObject.SetActive(visible);
+            if (!visible || dt == 0) continue;
             if (g.transfer && !equalized)
             {
                 float t = Mathf.Repeat(clock * .27f + g.phase, 1); float x = (g.phase - .5f) * 1.65f;

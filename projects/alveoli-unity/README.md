@@ -20,7 +20,9 @@ Unity 명령줄에서 다음 옵션을 지정합니다.
 
 프로젝트 상위 폴더의 `Alveoli-WebGL/`에 결과가 생성됩니다. GitHub Pages에 맞춰 Unity 자체 파일 압축을 끄고, 코드에서 찾는 생체 조직 셰이더를 빌드에 포함합니다.
 
-대용량 파일 전송 제한을 피하려면 Node.js로 `node Tools/Prepare-WebGL.cjs ../Alveoli-WebGL`을 실행합니다. 이 도구는 빌드의 데이터·WebAssembly 파일을 gzip 압축 조각으로 바꾸고, 브라우저에서 원본을 복원하는 로더를 적용합니다. 처리한 결과 폴더 전체를 저장소의 `simulations/alveoli-unity/`에 복사하여 배포합니다. 이 로더는 `DecompressionStream`을 지원하는 최신 브라우저가 필요합니다.
+Node.js로 `node Tools/Prepare-WebGL.cjs ../Alveoli-WebGL ../../simulations/alveoli-unity`를 실행해 배포 폴더를 생성합니다. 이 도구는 데이터·WebAssembly 파일을 gzip 압축 조각으로 바꾸고, 다운로드 진행률·시간 제한·자동 재시도를 제공하는 로더를 생성합니다. 동시에 최대 4개만 다운로드하며, Unity의 파일 해시 이름으로 이전 빌드와의 캐시 혼합을 방지합니다. 별도의 배포 폴더를 사용해야 하며, 해당 폴더의 `Build/` 파일은 생성 시 교체됩니다. `DecompressionStream`을 지원하는 최신 브라우저가 필요합니다.
+
+`node Tools/Check-WebGL.cjs ../../simulations/alveoli-unity`로 로더의 복원 결과·WebAssembly 유효성·재시도·동시 다운로드 수·진행률·오류 화면을 검사합니다.
 
 Windows 빌드는 `BuildAlveoli.Build`를 사용합니다. `Tools/Check-Compilation.ps1`은 설치된 Unity 어셈블리로 C# 컴파일을 검사합니다.
 

@@ -55,6 +55,12 @@ public static class BuildAlveoli
         // GitHub Pages does not configure Unity's compressed-content response headers.
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.template = "APPLICATION:Default";
+        PlayerSettings.WebGL.nameFilesAsHashes = true;
+        PlayerSettings.SetIl2CppCodeGeneration(UnityEditor.Build.NamedBuildTarget.WebGL, UnityEditor.Build.Il2CppCodeGeneration.OptimizeSize);
+        PlayerSettings.WebGL.initialMemorySize = 128;
+#if UNITY_WEBGL
+        UnityEditor.WebGL.UserBuildSettings.codeOptimization = UnityEditor.WebGL.WasmCodeOptimization.DiskSize;
+#endif
         var output = Path.GetFullPath("../Alveoli-WebGL");
         Directory.CreateDirectory(output);
         var result = BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, output, BuildTarget.WebGL, BuildOptions.None);
