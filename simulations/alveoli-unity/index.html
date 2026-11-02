@@ -3,6 +3,7 @@
 body{margin:0;min-height:100vh;background:#08131b;color:#e3edf0;font:16px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;flex-direction:column}header,.player{width:min(1440px,calc(100vw - 24px),calc(160vh - 128px))}header{display:flex;justify-content:space-between;align-items:center;margin:12px 0}a{color:#9ddde7}button{font:inherit;padding:8px 14px;cursor:pointer}.player{aspect-ratio:8/5;position:relative;background:#08131b}canvas{width:100%;height:100%;display:block}.loading{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:18px;background:#08131b;text-align:center;padding:24px}.loading h1{font-size:24px;margin:0}progress{width:min(480px,80vw);height:20px;accent-color:#45cada}#status{max-width:650px;line-height:1.6}#retry[hidden]{display:none}
 </style></head><body><header><a href="../../">← 과학 실험실</a><button id="fullscreen" disabled>전체 화면</button></header><main class="player"><canvas id="unity-canvas" width="1440" height="900" tabindex="0" aria-label="허파꽈리 기체 교환 3D 시뮬레이션"></canvas><section class="loading" id="loading"><h1>허파꽈리 기체 교환 3D</h1><progress id="progress" max="1" value="0" aria-label="실행 준비 진행률"></progress><div id="status" role="status" aria-live="polite">실행 파일을 준비하고 있습니다.</div><button id="retry" hidden>다시 시도</button></section></main><script>
 const files = [{"name":"5d0f4e6e3fa36877e48015785cec8f7f.data","count":10,"type":"application/octet-stream"},{"name":"13f23ed7a8bc244fd475a9847e9c2543.wasm","count":28,"type":"application/wasm"}];
+const assetBase = "https://cdn.jsdelivr.net/gh/ryowoo2726-hue/sci-simulation@8ffb05a4782ddde860a729e2fcb59183d403fcfa/Build/";
 const progress = document.querySelector('#progress'), status = document.querySelector('#status');
 const total = files.reduce((n, file) => n + file.count, 0);
 let downloaded = 0;
@@ -20,7 +21,7 @@ async function loadBuildFile(file) {
       const i = next++;
       for (let attempt = 0; attempt < 3; attempt++) {
         try {
-          const response = await fetch('Build/' + file.name + '.gz.' + String(i).padStart(2, '0'), {signal: AbortSignal.timeout(45000)});
+          const response = await fetch((attempt % 2 ? 'Build/' : assetBase) + file.name + '.gz.' + String(i).padStart(2, '0'), {signal: AbortSignal.timeout(45000)});
           if (!response.ok) throw new Error('HTTP ' + response.status);
           parts[i] = await response.arrayBuffer();
           downloaded++;
@@ -35,14 +36,15 @@ async function loadBuildFile(file) {
   return URL.createObjectURL(new Blob([await new Response(stream).arrayBuffer()], {type: file.type}));
 }
 const script = document.createElement('script');
-script.src = 'Build/b34093a5d4bb3902e297e6956eb4b095.loader.js';
-script.onerror = () => fail(new Error('실행 도구 다운로드 오류'));
+script.src = assetBase + 'b34093a5d4bb3902e297e6956eb4b095.loader.js';
+let localLoader = false;
+script.onerror = () => { if (!localLoader) { localLoader = true; script.src = 'Build/b34093a5d4bb3902e297e6956eb4b095.loader.js'; } else fail(new Error('실행 도구 다운로드 오류')); };
 script.onload = async () => {
   try {
     const urls = await Promise.all(files.map(loadBuildFile));
     status.textContent = '3D 화면을 시작하고 있습니다.';
     const instance = await createUnityInstance(document.querySelector('#unity-canvas'), {
-      dataUrl: urls[0], codeUrl: urls[1], frameworkUrl: 'Build/b09f6c0293f7e7a70ab4d34534849e41.framework.js',
+      dataUrl: urls[0], codeUrl: urls[1], frameworkUrl: assetBase + 'b09f6c0293f7e7a70ab4d34534849e41.framework.js',
       companyName: 'Science Classroom', productName: '허파꽈리 기체 교환', productVersion: '1.1',
       devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
       showBanner: (message, type) => { if (type === 'error') fail(new Error(message)); }

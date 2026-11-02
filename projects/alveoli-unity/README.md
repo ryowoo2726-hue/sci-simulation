@@ -24,6 +24,8 @@ Node.js로 `node Tools/Prepare-WebGL.cjs ../Alveoli-WebGL ../../simulations/alve
 
 `node Tools/Check-WebGL.cjs ../../simulations/alveoli-unity`로 로더의 복원 결과·WebAssembly 유효성·재시도·동시 다운로드 수·진행률·오류 화면을 검사합니다.
 
+현재 실행 파일은 같은 저장소의 `alveoli-web-assets` 브랜치에도 게시하며, jsDelivr의 고정 커밋 주소에서 다운로드합니다. CDN을 사용하려면 준비 명령의 마지막 인자로 `https://cdn.jsdelivr.net/gh/ryowoo2726-hue/sci-simulation@실행파일커밋SHA/Build/`를 전달합니다. 새 빌드마다 실행 파일 브랜치를 먼저 갱신하고 해당 커밋 SHA를 사용하세요. 다운로드 실패 시 GitHub Pages의 같은 파일로 재시도합니다.
+
 Windows 빌드는 `BuildAlveoli.Build`를 사용합니다. `Tools/Check-Compilation.ps1`은 설치된 Unity 어셈블리로 C# 컴파일을 검사합니다.
 
 이 모형은 실제 생리 수치를 계산하는 해석기가 아닙니다. 분자 크기와 색, 조직 구조, 이동 속도는 학습을 위해 단순화했습니다.

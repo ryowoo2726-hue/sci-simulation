@@ -1,4 +1,4 @@
-﻿const fs = require('node:fs');
+const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const zlib = require('node:zlib');
@@ -18,7 +18,7 @@ const context = vm.createContext({
     await new Promise(resolve => setTimeout(resolve, 1));
     try {
       if (!retries++) return new Response('', {status: 503});
-      return new Response(fs.readFileSync(path.join(site, url)));
+      return new Response(fs.readFileSync(path.join(site, 'Build', path.basename(new URL(url, 'http://localhost/').pathname))));
     } finally { active--; }
   }
 });
