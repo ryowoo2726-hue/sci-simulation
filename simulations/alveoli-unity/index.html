@@ -113,9 +113,13 @@
       // shortcut: segmented uploads avoid the current upload limit; use whole files when the connection allows it.
       async function loadBuildFile(name, count, type) {
         var parts = await Promise.all(Array.from({length: count}, async (_, i) => {
-          var response = await fetch(buildUrl + '/' + name + '.gz.' + String(i).padStart(2, '0'));
-          if (!response.ok) throw new Error('실행 파일을 불러오지 못했습니다: ' + response.status);
-          return response.arrayBuffer();
+          for (var attempt = 0; attempt < 3; attempt++) {
+            try {
+              var response = await fetch(buildUrl + '/' + name + '.gz.' + String(i).padStart(2, '0'));
+              if (!response.ok) throw new Error('실행 파일을 불러오지 못했습니다: ' + response.status);
+              return await response.arrayBuffer();
+            } catch (error) { if (attempt === 2) throw error; }
+          }
         }));
         var stream = new Blob(parts).stream().pipeThrough(new DecompressionStream('gzip'));
         return URL.createObjectURL(new Blob([await new Response(stream).arrayBuffer()], {type: type}));
