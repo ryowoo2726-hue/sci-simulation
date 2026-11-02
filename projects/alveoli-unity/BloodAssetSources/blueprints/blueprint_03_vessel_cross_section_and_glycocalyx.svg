@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 1050" width="1650" height="1050" style="background:#08121e; font-family:'Segoe UI', 'Malgun Gothic', monospace;">
+  <defs>
+    <pattern id="grid3" width="25" height="25" patternUnits="userSpaceOnUse">
+      <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#10253c" stroke-width="0.7"/>
+    </pattern>
+    <radialGradient id="lumenPlasmaGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd54f" stop-opacity="0.16"/>
+      <stop offset="72%" stop-color="#ffb300" stop-opacity="0.10"/>
+      <stop offset="92%" stop-color="#ff6f00" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#8d1b1b" stop-opacity="0.65"/>
+    </radialGradient>
+    <marker id="arrC" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff"/>
+    </marker>
+    <marker id="arrY" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <rect width="1650" height="1050" fill="url(#grid3)"/>
+  <rect x="18" y="18" width="1614" height="1014" fill="none" stroke="#00e5ff" stroke-width="2" opacity="0.8"/>
+
+  <!-- Header -->
+  <rect x="24" y="24" width="1602" height="62" fill="#0c2136" stroke="#00e5ff" stroke-width="1"/>
+  <text x="45" y="52" fill="#00e5ff" font-size="21" font-weight="bold">BLUEPRINT SHEET 03 : ARTERIOLE / CAPILLARY CROSS-SECTION, MARGINATION &amp; ENDOTHELIAL GLYCOCALYX</text>
+  <text x="45" y="74" fill="#8ab4f8" font-size="13">세동맥/모세혈관 횡단면(D = 30.0 μm) 4대 유체역학 구역(Zone A~D), 내피세포 당질층(EGL 0.4 μm), 기저막(1BKV) 및 백혈구 Rolling(1G1Q) 설계 도면</text>
+  <text x="1605" y="55" fill="#ffca28" font-size="15" font-weight="bold" text-anchor="end">DWG NO: HEM-3D-003</text>
+  <text x="1605" y="74" fill="#8ab4f8" font-size="12" text-anchor="end">Fåhræus-Lindqvist &amp; Margination Layout | 1 BU = 1.0 μm</text>
+
+  <!-- ==================== LEFT PANEL: FULL VESSEL CROSS SECTION ==================== -->
+  <rect x="36" y="102" width="890" height="912" fill="#071320" fill-opacity="0.88" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="56" y="132" fill="#00e5ff" font-size="16" font-weight="bold">[1] 혈관 횡단면 레이어 도면 (Axial Cross-Section at Y = 0 — Scale: 22 px = 1.0 μm)</text>
+  <text x="56" y="152" fill="#a8c7fa" font-size="12">중심 원점 (0, 0, 0) 기준 | 내경 D_lumen = 30.0 μm (R = 15.0 μm) | 외경 D_outer = 35.6 μm (R = 17.8 μm)</text>
+
+  <!-- Center of Vessel at (480, 560) -->
+  <!-- Layer 4: Outer Basement Membrane & Collagen IV (1BKV) R = 17.8 um -> 392 px -->
+  <circle cx="480" cy="560" r="392" fill="#2b0912" stroke="#ad1457" stroke-width="4" stroke-dasharray="10,4"/>
+  <!-- Layer 3: Endothelial Cell Wall (Zone D) R = 15.0 to 16.8 um -> 330 to 370 px -->
+  <circle cx="480" cy="560" r="370" fill="#5c0c16" stroke="#ff5252" stroke-width="2.5"/>
+  <!-- Endothelial Nuclei Bulges around wall -->
+  <ellipse cx="480" cy="198" rx="48" ry="16" fill="#4a148c" stroke="#b388ff" stroke-width="1.5"/>
+  <ellipse cx="835" cy="560" rx="16" ry="48" fill="#4a148c" stroke="#b388ff" stroke-width="1.5"/>
+  <ellipse cx="220" cy="815" rx="40" ry="15" transform="rotate(42 220 815)" fill="#4a148c" stroke="#b388ff" stroke-width="1.5"/>
+
+  <!-- Inner Lumen Plasma Volume R = 15.0 um -> 330 px -->
+  <circle cx="480" cy="560" r="330" fill="url(#lumenPlasmaGrad)" stroke="#ff8a80" stroke-width="2"/>
+
+  <!-- Layer 2b: Endothelial Glycocalyx Brush Border (R = 14.5 to 15.0 um -> 319 to 330 px) -->
+  <circle cx="480" cy="560" r="323" fill="none" stroke="#00e676" stroke-width="8" stroke-dasharray="1.5,3.5" opacity="0.75"/>
+
+  <!-- Zone C Boundary (Margination & Cell-Free Layer: R = 11.5 to 14.5 um -> 253 to 319 px) -->
+  <circle cx="480" cy="560" r="253" fill="none" stroke="#ffca28" stroke-width="1.8" stroke-dasharray="8,5"/>
+
+  <!-- Zone A: Core RBC Flow (r <= 11.5 um -> 253 px) -->
+  <!-- Multiple RBCs in Core Flow (Parachute & Angled Discocytes) -->
+  <g stroke="#ff5252" stroke-width="2" fill="#d50000" fill-opacity="0.82">
+    <ellipse cx="480" cy="545" rx="78" ry="26" transform="rotate(-12 480 545)"/>
+    <ellipse cx="385" cy="465" rx="76" ry="25" transform="rotate(24 385 465)"/>
+    <ellipse cx="575" cy="470" rx="75" ry="26" transform="rotate(-28 575 470)"/>
+    <ellipse cx="370" cy="615" rx="78" ry="25" transform="rotate(-18 370 615)"/>
+    <ellipse cx="580" cy="625" rx="74" ry="26" transform="rotate(19 580 625)"/>
+    <ellipse cx="475" cy="400" rx="72" ry="24" transform="rotate(6 475 400)"/>
+    <ellipse cx="485" cy="695" rx="75" ry="25" transform="rotate(-8 485 695)"/>
+  </g>
+
+  <!-- Zone C Objects: Marginated Rolling Neutrophil, Monocyte, and Platelets near wall -->
+  <!-- Rolling Neutrophil at right wall (r ~ 12.2 um) -->
+  <g transform="translate(715, 455)">
+    <circle cx="0" cy="0" r="58" fill="#bbdefb" fill-opacity="0.45" stroke="#80d8ff" stroke-width="2" stroke-dasharray="5,2"/>
+    <circle cx="-15" cy="-12" r="16" fill="#311b92" stroke="#b388ff" stroke-width="1.2"/>
+    <circle cx="14" cy="-8" r="15" fill="#311b92" stroke="#b388ff" stroke-width="1.2"/>
+    <circle cx="5" cy="18" r="16" fill="#311b92" stroke="#b388ff" stroke-width="1.2"/>
+    <!-- Tethers to wall (P-Selectin 1G1Q) -->
+    <line x1="54" y1="-15" x2="78" y2="-28" stroke="#00e676" stroke-width="2"/>
+    <line x1="56" y1="8" x2="82" y2="12" stroke="#00e676" stroke-width="2"/>
+    <text x="0" y="42" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">WBC (Rolling)</text>
+  </g>
+
+  <!-- Resting & Activated Platelets in Zone C -->
+  <ellipse cx="225" cy="475" rx="26" ry="9" transform="rotate(-65 225 475)" fill="#ffe082" stroke="#ffca28" stroke-width="1.8"/>
+  <ellipse cx="265" cy="345" rx="25" ry="8" transform="rotate(-38 265 345)" fill="#ffe082" stroke="#ffca28" stroke-width="1.8"/>
+  <ellipse cx="645" cy="765" rx="26" ry="9" transform="rotate(-40 645 765)" fill="#ffe082" stroke="#ffca28" stroke-width="1.8"/>
+  <text x="195" y="478" fill="#ffca28" font-size="11" font-weight="bold" text-anchor="end">PLT (혈소판)</text>
+
+  <!-- Plasma Nano-molecules Hero Focus Box in Zone B -->
+  <rect x="415" y="485" width="130" height="110" fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <text x="480" y="478" fill="#00e5ff" font-size="11" font-weight="bold" text-anchor="middle">Hero Focus Zone (4×4 μm)</text>
+  <g fill="#ffca28">
+    <circle cx="435" cy="510" r="2"/><circle cx="450" cy="502" r="1.5"/><circle cx="515" cy="520" r="2.2"/>
+    <circle cx="528" cy="565" r="1.8"/><circle cx="442" cy="575" r="2"/><circle cx="495" cy="580" r="1.5"/>
+  </g>
+
+  <!-- Radius Dimension Lines -->
+  <line x1="480" y1="560" x2="480" y2="952" stroke="#00e5ff" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="480" y1="560" x2="227" y2="560" stroke="#ffca28" stroke-width="1.8" marker-end="url(#arrY)"/>
+  <text x="355" y="550" fill="#ffca28" font-size="12" font-weight="bold" text-anchor="middle">Zone A 반경 r = 11.5 μm</text>
+  <line x1="480" y1="560" x2="810" y2="560" stroke="#00e5ff" stroke-width="1.8" marker-end="url(#arrC)"/>
+  <text x="645" y="550" fill="#00e5ff" font-size="12" font-weight="bold" text-anchor="middle">내강 반경 R_lumen = 15.0 μm</text>
+
+  <!-- Legend below circle -->
+  <text x="56" y="975" fill="#00e676" font-size="12" font-weight="bold">● 초록 브러시 링: 내피세포 당질층 (Endothelial Glycocalyx Layer, 두께 0.4 μm, 시알산 CID445063 음전하 장벽)</text>
+  <text x="56" y="998" fill="#ffca28" font-size="12" font-weight="bold">● 황색 점선 링 (r = 11.5 ~ 14.6 μm): 백혈구·혈소판 벽면 이동층 (Margination Zone C) &amp; 무세포 혈장층 (Cell-Free Layer)</text>
+
+  <!-- ==================== RIGHT PANEL: ULTRASTRUCTURAL CALLOUTS ==================== -->
+  <!-- Top Right: Endothelial Wall & Glycocalyx & Leukocyte Rolling Zoom-in -->
+  <rect x="942" y="102" width="672" height="450" fill="#071320" fill-opacity="0.88" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="962" y="132" fill="#ffca28" font-size="16" font-weight="bold">[2] 혈관 내벽 4층 초미세구조 &amp; 백혈구 유착 확대도 (Wall &amp; EGL Zoom-In)</text>
+  <text x="962" y="152" fill="#a8c7fa" font-size="12">실제 전자현미경에서 혈관벽의 벨벳 같은 질감을 만드는 당질층(Glycocalyx)과 기저막 구조</text>
+
+  <!-- Layered Wall Diagram (Horizontal Layers) -->
+  <!-- Layer D3: Collagen IV Basement Membrane (1BKV) -->
+  <rect x="965" y="425" width="625" height="38" fill="#380b18" stroke="#ec407a" stroke-width="1.5"/>
+  <text x="1277" y="449" fill="#f48fb1" font-size="12" font-weight="bold" text-anchor="middle">[Layer D-3] 기저막 (Basement Membrane, 두께 0.2~0.5 μm) — 제4형 콜라겐 삼중나선(1BKV.pdb) 그물망</text>
+
+  <!-- Layer D2: Endothelial Cells (Cobblestone Tile with Tight Junction & Nucleus) -->
+  <rect x="965" y="345" width="308" height="80" fill="#6e101c" stroke="#ff5252" stroke-width="2" rx="8"/>
+  <rect x="1282" y="345" width="308" height="80" fill="#6e101c" stroke="#ff5252" stroke-width="2" rx="8"/>
+  <ellipse cx="1115" cy="385" rx="68" ry="20" fill="#4a148c" stroke="#b388ff" stroke-width="1.5"/>
+  <ellipse cx="1435" cy="385" rx="68" ry="20" fill="#4a148c" stroke="#b388ff" stroke-width="1.5"/>
+  <text x="1115" y="389" fill="#ffffff" font-size="11" text-anchor="middle">내피세포 핵 (높이 1.2 μm)</text>
+  <text x="1277" y="335" fill="#ffca28" font-size="11" font-weight="bold" text-anchor="middle">▼ 세포간 틈새 (Intercellular Cleft, VE-Cadherin)</text>
+
+  <!-- Layer D1: Endothelial Glycocalyx Brush Border (0.4 um) -->
+  <g stroke="#00e676" stroke-width="1.8" fill="none">
+    <path d="M 985 345 Q 980 310 990 290"/><path d="M 985 320 Q 998 302 1002 292"/>
+    <path d="M 1020 345 Q 1015 310 1025 290"/><path d="M 1020 320 Q 1032 302 1038 292"/>
+    <path d="M 1055 345 Q 1050 310 1060 290"/><path d="M 1090 345 Q 1085 310 1095 290"/>
+    <path d="M 1125 345 Q 1120 310 1130 290"/><path d="M 1160 345 Q 1155 310 1165 290"/>
+    <path d="M 1195 345 Q 1190 310 1200 290"/><path d="M 1230 345 Q 1225 310 1235 290"/>
+    <path d="M 1310 345 Q 1305 310 1315 290"/><path d="M 1345 345 Q 1340 310 1350 290"/>
+    <path d="M 1380 345 Q 1375 310 1385 290"/><path d="M 1415 345 Q 1410 310 1420 290"/>
+    <path d="M 1450 345 Q 1445 310 1455 290"/><path d="M 1485 345 Q 1480 310 1490 290"/>
+    <path d="M 1520 345 Q 1515 310 1525 290"/><path d="M 1555 345 Q 1550 310 1560 290"/>
+  </g>
+  <text x="975" y="280" fill="#00e676" font-size="12" font-weight="bold">[Layer D-1] 당질층 (Endothelial Glycocalyx, 높이 0.3~0.5 μm) — 프로테오글리칸 + 시알산(CID445063) 숲</text>
+
+  <!-- P-Selectin + PSGL-1 Leukocyte Rolling Tether -->
+  <path d="M 1350 205 C 1390 225, 1425 265, 1450 315" fill="none" stroke="#80d8ff" stroke-width="5"/>
+  <circle cx="1450" cy="315" r="7" fill="#ffca28" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="1180" y="210" fill="#00e5ff" font-size="12" font-weight="bold">백혈구 미세융모 테더 (Membrane Tether, 길이 1.9 μm)</text>
+  <text x="1180" y="230" fill="#ffca28" font-size="11.5">★ 결합 부위: P-Selectin + PSGL-1 결정 구조 (1G1Q.pdb)</text>
+
+  <text x="965" y="492" fill="#d2e3fc" font-size="11.5">• 내피세포 타일 규격: 길이(혈류 축) 15.0 μm × 폭 5.0 μm × 두께 1.2 μm (핵 부위 2.2 μm 융기)</text>
+  <text x="965" y="514" fill="#d2e3fc" font-size="11.5">• 혈관 손상 시 내피세포가 벌어지며 기저막 콜라겐(1BKV) 노출 → vWF(1AUQ)가 결합하여 혈소판 응집 개시</text>
+  <text x="965" y="536" fill="#00e5ff" font-size="11.5">• Blender 구현: 내벽 메쉬에 Voronoi F1 Bump + Hair Curves(길이 0.35 μm, 반투명 Coat 0.8) 적용</text>
+
+  <!-- Bottom Right: Poiseuille Velocity & Optical Transillumination Setup -->
+  <rect x="942" y="568" width="672" height="446" fill="#071320" fill-opacity="0.88" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="962" y="598" fill="#00e5ff" font-size="16" font-weight="bold">[3] 포아즈유 유속 분포(Poiseuille Flow) &amp; 생체광학 조명/카메라 배치도</text>
+  <text x="962" y="618" fill="#a8c7fa" font-size="12">v(r) = v_max · (1 - r² / R²) 포물선 혈류 프로파일 및 Cycles Subsurface Transillumination 라이팅 도면</text>
+
+  <!-- Parabolic Velocity Profile Diagram -->
+  <rect x="965" y="638" width="625" height="190" fill="#0a1929" stroke="#265985" stroke-width="1"/>
+  <line x1="1020" y1="655" x2="1020" y2="810" stroke="#ff5252" stroke-width="3"/>
+  <line x1="1020" y1="732" x2="1550" y2="732" stroke="#00e5ff" stroke-width="1" stroke-dasharray="5,4"/>
+  <!-- Parabola curve -->
+  <path d="M 1020 655 Q 1490 732 1020 810" fill="#00e5ff" fill-opacity="0.12" stroke="#00e5ff" stroke-width="2.5"/>
+  <line x1="1020" y1="732" x2="1245" y2="732" stroke="#ffca28" stroke-width="2.2" marker-end="url(#arrY)"/>
+  <line x1="1020" y1="695" x2="1190" y2="695" stroke="#00e5ff" stroke-width="1.6" marker-end="url(#arrC)"/>
+  <line x1="1020" y1="769" x2="1190" y2="769" stroke="#00e5ff" stroke-width="1.6" marker-end="url(#arrC)"/>
+  <line x1="1020" y1="668" x2="1085" y2="668" stroke="#8ab4f8" stroke-width="1.2" marker-end="url(#arrC)"/>
+  <line x1="1020" y1="796" x2="1085" y2="796" stroke="#8ab4f8" stroke-width="1.2" marker-end="url(#arrC)"/>
+  <text x="1260" y="728" fill="#ffca28" font-size="12" font-weight="bold">중심 최대 유속 v_max = 2.5 mm/s (낙하산형 RBC)</text>
+  <text x="1205" y="698" fill="#00e5ff" font-size="11.5">중간 전단층 (슬리퍼형 RBC, 기울기 25°)</text>
+  <text x="1100" y="670" fill="#8ab4f8" font-size="11">벽면 저속층 (백혈구 Rolling v ≈ 0.05 mm/s)</text>
+
+  <!-- Optical & Camera Rig Specs -->
+  <text x="965" y="858" fill="#ffca28" font-size="13" font-weight="bold">[의학 시네마틱 3점 조명 &amp; 광학 상수 요약 (Bosschaert &amp; Friebel 기준)]</text>
+  <text x="965" y="882" fill="#d2e3fc" font-size="12">1. 주 역광 (Transillumination Key Light): 혈관 후방 상단 145° 배치, 강도 85 W, 색온도 5200K</text>
+  <text x="980" y="902" fill="#8ab4f8" font-size="11.5">→ 적혈구 중앙 오목부(0.81 μm)를 투과하며 전방 산란(SSS Anisotropy g = 0.90) 루비빛 형성</text>
+  <text x="965" y="926" fill="#d2e3fc" font-size="12">2. 굴절률(IOR) 정합: 혈장 n = 1.350 | 적혈구 세포질 n = 1.402 | 백혈구 핵 n = 1.415 | 호산구 결정 n = 1.455</text>
+  <text x="965" y="950" fill="#d2e3fc" font-size="12">3. 혈장 볼륨(Principled Volume): 빌리루빈(CID5280352)에 의한 담황색 산란 (0.92, 0.78, 0.35), Density = 0.015</text>
+  <text x="965" y="974" fill="#00e5ff" font-size="12">4. 현미경 피사계 심도(DoF): 85mm 마크로 렌즈, F-Stop = 0.35, 초점 거리 = Hero Focus Zone 중심</text>
+</svg>
+

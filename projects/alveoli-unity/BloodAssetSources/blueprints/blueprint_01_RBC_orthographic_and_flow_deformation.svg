@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1050" width="1600" height="1050" style="background:#08121e; font-family:'Segoe UI', 'Malgun Gothic', monospace;">
+  <defs>
+    <pattern id="minorGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#112840" stroke-width="0.7"/>
+    </pattern>
+    <pattern id="majorGrid" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#minorGrid)"/>
+      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#1b3f63" stroke-width="1.3"/>
+    </pattern>
+    <radialGradient id="rbcTopGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff3b30" stop-opacity="0.30"/>
+      <stop offset="32%" stop-color="#b81414" stop-opacity="0.55"/>
+      <stop offset="68%" stop-color="#ff2a1f" stop-opacity="0.92"/>
+      <stop offset="90%" stop-color="#8a0808" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#420202" stop-opacity="0.98"/>
+    </radialGradient>
+    <linearGradient id="rbcCutGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff4d3d" stop-opacity="0.88"/>
+      <stop offset="50%" stop-color="#7a0909" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ff4d3d" stop-opacity="0.88"/>
+    </linearGradient>
+    <marker id="arrowCyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff"/>
+    </marker>
+    <marker id="arrowGold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <!-- Blueprint Grid Background -->
+  <rect width="1600" height="1050" fill="url(#majorGrid)"/>
+  <rect x="18" y="18" width="1564" height="1014" fill="none" stroke="#00e5ff" stroke-width="2" opacity="0.8"/>
+  <rect x="24" y="24" width="1552" height="1002" fill="none" stroke="#00e5ff" stroke-width="0.6" opacity="0.5"/>
+
+  <!-- Header Banner -->
+  <rect x="24" y="24" width="1552" height="62" fill="#0c2136" stroke="#00e5ff" stroke-width="1"/>
+  <text x="45" y="52" fill="#00e5ff" font-size="21" font-weight="bold">BLUEPRINT SHEET 01 : ERYTHROCYTE (RED BLOOD CELL) ORTHOGRAPHIC &amp; BIOMECHANICAL DEFORMATION</text>
+  <text x="45" y="74" fill="#8ab4f8" font-size="13">의학·혈액학 정밀 설계 도면 (Evans &amp; Fung 1972 Parametric Profile + Skalak Microcirculation Parachute / Slipper / Rouleaux Models) | Scale: 1 BU = 1.0 μm</text>
+  <text x="1550" y="55" fill="#ffca28" font-size="15" font-weight="bold" text-anchor="end">DWG NO: HEM-3D-001</text>
+  <text x="1550" y="74" fill="#8ab4f8" font-size="12" text-anchor="end">MCHC: 34 g/dL | n = 1.402 | g = 0.985</text>
+
+  <!-- ==================== PANEL 1: FRONT CROSS-SECTION (EVANS & FUNG EXACT) ==================== -->
+  <rect x="40" y="102" width="880" height="440" fill="#071320" fill-opacity="0.85" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="58" y="130" fill="#00e5ff" font-size="16" font-weight="bold">[1] 수직 단면 정밀 프로파일 (Axisymmetric Cross-Section Profile — Scale: 100 px = 1.0 μm)</text>
+  <text x="58" y="150" fill="#a8c7fa" font-size="12">수식: z(r) = ± R₀ √(1 - ρ²) · [0.2072 + 2.0026 ρ² - 1.1228 ρ⁴],  ρ = r / 3.91 μm  (체적 V = 94 μm³, 표면적 A = 135 μm²)</text>
+
+  <!-- Coordinate Axes Centered at (480, 330), where 1 um = 100 px -->
+  <line x1="60" y1="330" x2="900" y2="330" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.7"/>
+  <line x1="480" y1="165" x2="480" y2="495" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="6,4" opacity="0.7"/>
+  <text x="895" y="322" fill="#00e5ff" font-size="12" text-anchor="end">+R (반지름 축, μm)</text>
+  <text x="490" y="180" fill="#00e5ff" font-size="12">+Z (두께 축, μm)</text>
+
+  <!-- Exact Evans & Fung Cross Section Polygon (Center 480,330; 1um = 100px)
+       r=0.0 -> z=±40.5; r=0.5 -> z=±46.5; r=1.0 -> z=±63.1; r=1.5 -> z=±86.9; r=2.0 -> z=±111.3;
+       r=2.68 -> z=±129.0; r=3.1 -> z=±121.7; r=3.5 -> z=±94.6; r=3.8 -> z=±50.3; r=3.91 -> z=0 -->
+  <path d="M 89 330
+           C 89 279.7, 100 250, 130 235.4
+           C 170 208.3, 190 201.0, 212 201.0
+           C 245 201.0, 280 218.7, 330 243.1
+           C 380 266.9, 430 283.5, 480 289.5
+           C 530 283.5, 580 266.9, 630 243.1
+           C 680 218.7, 715 201.0, 748 201.0
+           C 770 201.0, 790 208.3, 830 235.4
+           C 860 250, 871 279.7, 871 330
+           C 871 380.3, 860 410, 830 424.6
+           C 790 451.7, 770 459.0, 748 459.0
+           C 715 459.0, 680 441.3, 630 416.9
+           C 580 393.1, 530 376.5, 480 370.5
+           C 430 376.5, 380 393.1, 330 416.9
+           C 280 441.3, 245 459.0, 212 459.0
+           C 190 459.0, 170 451.7, 130 424.6
+           C 100 410, 89 380.3, 89 330 Z"
+        fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="3"/>
+
+  <!-- Spectrin-Actin Cytoskeleton Inner Layer Callout Line -->
+  <path d="M 95 330
+           C 95 284, 106 256, 135 241
+           C 172 214, 192 207, 212 207
+           C 245 207, 280 224, 330 249
+           C 380 272, 430 289, 480 295
+           C 530 289, 580 272, 630 249
+           C 680 224, 715 207, 748 207
+           C 770 207, 788 214, 825 241
+           C 854 256, 865 284, 865 330"
+        fill="none" stroke="#ffca28" stroke-width="1.2" stroke-dasharray="4,3" opacity="0.85"/>
+
+  <!-- Sample Vertex Points -->
+  <g fill="#00e5ff" stroke="#08121e" stroke-width="1.5">
+    <circle cx="480" cy="289.5" r="4.5"/><circle cx="480" cy="370.5" r="4.5"/>
+    <circle cx="580" cy="266.9" r="4"/><circle cx="680" cy="218.7" r="4"/>
+    <circle cx="748" cy="201.0" r="5" fill="#ffca28"/><circle cx="748" cy="459.0" r="5" fill="#ffca28"/>
+    <circle cx="212" cy="201.0" r="5" fill="#ffca28"/><circle cx="212" cy="459.0" r="5" fill="#ffca28"/>
+    <circle cx="830" cy="235.4" r="4"/><circle cx="871" cy="330.0" r="5" fill="#00e5ff"/>
+    <circle cx="89" cy="330.0" r="5" fill="#00e5ff"/>
+  </g>
+
+  <!-- Dimension Lines: Total Diameter 7.82 um -->
+  <line x1="89" y1="330" x2="89" y2="515" stroke="#00e5ff" stroke-width="0.9" stroke-dasharray="3,3"/>
+  <line x1="871" y1="330" x2="871" y2="515" stroke="#00e5ff" stroke-width="0.9" stroke-dasharray="3,3"/>
+  <line x1="95" y1="505" x2="865" y2="505" stroke="#00e5ff" stroke-width="1.8" marker-start="url(#arrowCyan)" marker-end="url(#arrowCyan)"/>
+  <rect x="375" y="492" width="210" height="24" fill="#071320"/>
+  <text x="480" y="509" fill="#00e5ff" font-size="14" font-weight="bold" text-anchor="middle">외경 D = 7.82 μm (R₀ = 3.91 μm)</text>
+
+  <!-- Dimension Lines: Rim Crest Distance 2.68 um -->
+  <line x1="748" y1="201" x2="748" y2="172" stroke="#ffca28" stroke-width="0.9" stroke-dasharray="3,3"/>
+  <line x1="485" y1="180" x2="742" y2="180" stroke="#ffca28" stroke-width="1.5" marker-start="url(#arrowGold)" marker-end="url(#arrowGold)"/>
+  <text x="614" y="174" fill="#ffca28" font-size="12" font-weight="bold" text-anchor="middle">r_crest = 2.68 μm (ρ = 0.685)</text>
+
+  <!-- Dimension Lines: Max Rim Thickness 2.58 um -->
+  <line x1="748" y1="201" x2="825" y2="201" stroke="#ffca28" stroke-width="0.9" stroke-dasharray="3,3"/>
+  <line x1="748" y1="459" x2="825" y2="459" stroke="#ffca28" stroke-width="0.9" stroke-dasharray="3,3"/>
+  <line x1="815" y1="207" x2="815" y2="453" stroke="#ffca28" stroke-width="1.6" marker-start="url(#arrowGold)" marker-end="url(#arrowGold)"/>
+  <text x="808" y="195" fill="#ffca28" font-size="12" font-weight="bold" text-anchor="end">최대 두께 h_max = 2.58 μm (±1.29 μm)</text>
+
+  <!-- Dimension Lines: Center Dimple Thickness 0.81 um -->
+  <line x1="440" y1="289.5" x2="480" y2="289.5" stroke="#00e5ff" stroke-width="1"/>
+  <line x1="440" y1="370.5" x2="480" y2="370.5" stroke="#00e5ff" stroke-width="1"/>
+  <line x1="448" y1="294" x2="448" y2="366" stroke="#00e5ff" stroke-width="1.5" marker-start="url(#arrowCyan)" marker-end="url(#arrowCyan)"/>
+  <text x="438" y="326" fill="#00e5ff" font-size="12" font-weight="bold" text-anchor="end">중앙 최소 두께</text>
+  <text x="438" y="342" fill="#00e5ff" font-size="12" font-weight="bold" text-anchor="end">h_min = 0.81 μm</text>
+
+  <!-- Internal Cytoplasm Callout -->
+  <text x="235" y="325" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">무핵 세포질 (No Nucleus / No Mitochondria)</text>
+  <text x="235" y="343" fill="#ffca28" font-size="11" text-anchor="middle">헤모글로빈(1GZX/2HHB) 약 2억 7천만 분자 밀집</text>
+  <text x="235" y="359" fill="#8ab4f8" font-size="11" text-anchor="middle">탄산무수화효소 II (1CA2) + 스펙트린 육각 격자막</text>
+
+  <!-- ==================== PANEL 2: TOP PLAN VIEW (AXIAL VIEW) ==================== -->
+  <rect x="936" y="102" width="624" height="440" fill="#071320" fill-opacity="0.85" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="954" y="130" fill="#00e5ff" font-size="16" font-weight="bold">[2] 상단 평면도 (Top Plan View &amp; Transillumination Zones)</text>
+  <text x="954" y="150" fill="#a8c7fa" font-size="12">현미경 역광(Backlight) 시 중앙 오목부($r &lt; 1.8\text{ }\mu\text{m}$)에서 강한 루비빛 투과(SSS) 발생</text>
+
+  <!-- Top View RBC Circle centered at (1248, 330), R = 165px (scaled 42.2 px/um) -->
+  <circle cx="1248" cy="330" r="165" fill="url(#rbcTopGrad)" stroke="#ff5252" stroke-width="2.5"/>
+  <!-- Rim Crest Circle (r = 2.68 um -> 113 px) -->
+  <circle cx="1248" cy="330" r="113" fill="none" stroke="#ffca28" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Central Dimple Zone (r = 1.25 um -> 53 px) -->
+  <circle cx="1248" cy="330" r="53" fill="none" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="1060" y1="330" x2="1436" y2="330" stroke="#00e5ff" stroke-width="0.8" stroke-dasharray="5,5" opacity="0.6"/>
+  <line x1="1248" y1="155" x2="1248" y2="505" stroke="#00e5ff" stroke-width="0.8" stroke-dasharray="5,5" opacity="0.6"/>
+
+  <!-- Annotations on Top View -->
+  <line x1="1248" y1="330" x2="1365" y2="213" stroke="#00e5ff" stroke-width="1.4" marker-end="url(#arrowCyan)"/>
+  <text x="1372" y="208" fill="#00e5ff" font-size="12" font-weight="bold">R₀ = 3.91 μm (적도 외경)</text>
+  <line x1="1248" y1="330" x2="1168" y2="250" stroke="#ffca28" stroke-width="1.4" marker-end="url(#arrowGold)"/>
+  <text x="1158" y="242" fill="#ffca28" font-size="12" font-weight="bold" text-anchor="end">r = 2.68 μm (Rim 마루)</text>
+  <text x="1248" y="334" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">Central Pallor</text>
+  <text x="1248" y="348" fill="#00e5ff" font-size="10" text-anchor="middle">(박막 투과창 0.81 μm)</text>
+  <text x="954" y="520" fill="#8ab4f8" font-size="12">• Blender 토폴로지: 64 Radial Rings × 128 Azimuthal Sectors = 8,192 Quads (Catmull-Clark Subdiv Lv.2)</text>
+
+  <!-- ==================== PANEL 3: IN-VIVO HEMODYNAMIC DEFORMATION BLUEPRINTS ==================== -->
+  <rect x="40" y="558" width="1520" height="450" fill="#071320" fill-opacity="0.90" stroke="#1e4976" stroke-width="1.5"/>
+  <text x="58" y="588" fill="#ffca28" font-size="17" font-weight="bold">[3] 생체 내 미세혈관 혈류역학 변형 도면 (In-Vivo Hemodynamic &amp; Rheological States — 실제 의학 렌더링 필수 반영)</text>
+  <text x="58" y="610" fill="#a8c7fa" font-size="12">혈관 내 유속(Poiseuille Flow)과 전단 응력(Shear Stress)에 의해 적혈구는 정지 원반(A) 외에도 낙하산형(B), 슬리퍼형(C), 연전 현상(D)으로 변형됩니다.</text>
+
+  <!-- Sub-box A: Resting Discocyte -->
+  <rect x="58" y="626" width="350" height="360" fill="#0a1929" stroke="#265985" stroke-width="1"/>
+  <text x="233" y="652" fill="#00e5ff" font-size="14" font-weight="bold" text-anchor="middle">[State A] 정지/저전단 원반형 (Discocyte)</text>
+  <text x="233" y="670" fill="#8ab4f8" font-size="11" text-anchor="middle">대칭 양면 오목 원반 (외경 7.82 μm × 두께 2.58 μm)</text>
+  <path d="M 113 785 C 113 750, 145 740, 165 740 C 195 740, 210 768, 233 768 C 256 768, 271 740, 301 740 C 321 740, 353 750, 353 785 C 353 820, 321 830, 301 830 C 271 830, 256 802, 233 802 C 210 802, 195 830, 165 830 C 145 830, 113 820, 113 785 Z"
+        fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2.5"/>
+  <text x="72" y="905" fill="#d2e3fc" font-size="11.5">• 위치: 정지 상태 또는 큰 혈관 저전단 영역</text>
+  <text x="72" y="925" fill="#d2e3fc" font-size="11.5">• 산소포화도에 따른 색상 분기:</text>
+  <text x="82" y="945" fill="#ff6b6b" font-size="11.5">- 동맥혈(Oxy-Hb, 1GZX): 선홍색 (0.58, 0.014, 0.012)</text>
+  <text x="82" y="965" fill="#b388ff" font-size="11.5">- 정맥혈(Deoxy-Hb, 2HHB): 암자홍색 (0.21, 0.008, 0.028)</text>
+
+  <!-- Sub-box B: Parachute Shape -->
+  <rect x="428" y="626" width="365" height="360" fill="#0a1929" stroke="#265985" stroke-width="1"/>
+  <text x="610" y="652" fill="#ffca28" font-size="14" font-weight="bold" text-anchor="middle">[State B] 중심 혈류 '낙하산 변형' (Parachute)</text>
+  <text x="610" y="670" fill="#8ab4f8" font-size="11" text-anchor="middle">세동맥/모세혈관 중심축 고속 유동 (r &lt; 4.0 μm)</text>
+  <!-- Flow arrows -->
+  <line x1="450" y1="785" x2="765" y2="785" stroke="#00e5ff" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <line x1="460" y1="740" x2="520" y2="740" stroke="#ffca28" stroke-width="2" marker-end="url(#arrowGold)"/>
+  <line x1="460" y1="785" x2="545" y2="785" stroke="#ffca28" stroke-width="2.5" marker-end="url(#arrowGold)"/>
+  <line x1="460" y1="830" x2="520" y2="830" stroke="#ffca28" stroke-width="2" marker-end="url(#arrowGold)"/>
+  <text x="495" y="728" fill="#ffca28" font-size="11" font-weight="bold">혈류 압력 (v_max)</text>
+  <!-- Parachute Cross-section shape facing right -->
+  <path d="M 555 698
+           C 635 695, 715 730, 715 785
+           C 715 840, 635 875, 555 872
+           C 530 870, 525 845, 550 838
+           C 605 828, 650 812, 650 785
+           C 650 758, 605 742, 550 732
+           C 525 725, 530 700, 555 698 Z"
+        fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2.5"/>
+  <text x="444" y="905" fill="#d2e3fc" font-size="11.5">• 수식: z' = z₀ + A_dome·(1 - 1.35ρ² + 0.35ρ⁴)</text>
+  <text x="444" y="925" fill="#d2e3fc" font-size="11.5">• 외경 축소: 7.82 μm → 6.85 μm, 돔 깊이 A_dome = 1.9 μm</text>
+  <text x="444" y="945" fill="#ffca28" font-size="11.5">• 씬 내 중심부(Zone A) 적혈구의 40%에 적용 권장</text>
+  <text x="444" y="965" fill="#8ab4f8" font-size="11.5">• 전단 탄성 계수 μ_s = 4.2 μN/m (스펙트린 네트워크 탄성)</text>
+
+  <!-- Sub-box C: Slipper Shape -->
+  <rect x="813" y="626" width="365" height="360" fill="#0a1929" stroke="#265985" stroke-width="1"/>
+  <text x="995" y="652" fill="#00e5ff" font-size="14" font-weight="bold" text-anchor="middle">[State C] 편심 전단 '슬리퍼 변형' (Slipper Shape)</text>
+  <text x="995" y="670" fill="#8ab4f8" font-size="11" text-anchor="middle">중심축에서 벗어난 전단 구배 구역 (4.0 &lt; r &lt; 11.0 μm)</text>
+  <!-- Asymmetric Shear velocity arrows -->
+  <line x1="835" y1="720" x2="935" y2="720" stroke="#00e5ff" stroke-width="2.2" marker-end="url(#arrowCyan)"/>
+  <line x1="835" y1="780" x2="900" y2="780" stroke="#00e5ff" stroke-width="1.6" marker-end="url(#arrowCyan)"/>
+  <line x1="835" y1="840" x2="865" y2="840" stroke="#00e5ff" stroke-width="1.2" marker-end="url(#arrowCyan)"/>
+  <text x="835" y="708" fill="#00e5ff" font-size="10.5">중심쪽 빠른 유속</text>
+  <text x="835" y="860" fill="#8ab4f8" font-size="10.5">벽면쪽 느린 유속 (Tank-treading 회전)</text>
+  <!-- Asymmetric Slipper Profile -->
+  <path d="M 920 825
+           C 905 790, 955 720, 1045 705
+           C 1105 695, 1135 725, 1110 760
+           C 1085 795, 1025 805, 985 835
+           C 955 858, 930 850, 920 825 Z"
+        fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2.5"/>
+  <text x="829" y="905" fill="#d2e3fc" font-size="11.5">• 원리: 벽면과 중심부 사이의 유속 차이(dv/dr)로 비대칭 변형</text>
+  <text x="829" y="925" fill="#d2e3fc" font-size="11.5">• 세포막이 탱크 무한궤도처럼 회전(Tank-treading motion)</text>
+  <text x="829" y="945" fill="#00e5ff" font-size="11.5">• 씬 내 중경(Zone A 외곽) 적혈구의 35%에 적용 권장</text>
+  <text x="829" y="965" fill="#8ab4f8" font-size="11.5">• 진행 방향에 대해 18° ~ 38° 피치 기울기 부여</text>
+
+  <!-- Sub-box D: Rouleaux Stack -->
+  <rect x="1198" y="626" width="344" height="360" fill="#0a1929" stroke="#265985" stroke-width="1"/>
+  <text x="1370" y="652" fill="#ffca28" font-size="14" font-weight="bold" text-anchor="middle">[State D] 연전 현상 (Rouleaux Stack)</text>
+  <text x="1370" y="670" fill="#8ab4f8" font-size="11" text-anchor="middle">피브리노겐(3GHG) 가교에 의한 동전 꾸러미 적층</text>
+  <!-- 4 Stacked RBCs -->
+  <g transform="translate(1370, 785) rotate(-14)">
+    <ellipse cx="-55" cy="0" rx="18" ry="62" fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2"/>
+    <ellipse cx="-18" cy="2" rx="18" ry="62" fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2"/>
+    <ellipse cx="19" cy="-1" rx="18" ry="62" fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2"/>
+    <ellipse cx="56" cy="1" rx="18" ry="62" fill="url(#rbcCutGrad)" stroke="#ff5252" stroke-width="2"/>
+    <!-- Fibrinogen bridges -->
+    <line x1="-37" y1="-35" x2="-36" y2="-35" stroke="#ffca28" stroke-width="4"/>
+    <line x1="0" y1="35" x2="2" y2="35" stroke="#ffca28" stroke-width="4"/>
+    <line x1="37" y1="-30" x2="39" y2="-30" stroke="#ffca28" stroke-width="4"/>
+  </g>
+  <text x="1212" y="905" fill="#d2e3fc" font-size="11.5">• 중심 간격 Δd = 1.95 ~ 2.15 μm (4~6개 클러스터)</text>
+  <text x="1212" y="925" fill="#d2e3fc" font-size="11.5">• 원인: 혈장 피브리노겐(45 nm) 및 IgG 가교 결합</text>
+  <text x="1212" y="945" fill="#ffca28" font-size="11.5">• 배경/중경에 2~3개 연전 클러스터 배치 시 의학적 리얼리티 극대화</text>
+  <text x="1212" y="965" fill="#8ab4f8" font-size="11.5">• 적혈구 표면 시알산(CID445063) 제타전위(-15 mV) 균형</text>
+</svg>
+
